@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" role="img" aria-label="cozy-fleece-hoodie">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#ffeadf"/>
+<stop offset="1" stop-color="#ffd5c0"/>
+</linearGradient>
+</defs>
+<rect width="600" height="750" fill="url(#bg)"/>
+<circle cx="300" cy="345" r="185" fill="#ffffff" opacity=".5"/>
+<g transform="translate(190 235) scale(1.85) rotate(-4 60 60)" fill="#bd6244"><path d="M42 30 30 39l9 16 7-4v46h28V51l7 4 9-16-12-9q-9-10-18-10t-18 10z"/><path d="M48 22q12 14 24 0l-4 10q-8 6-16 0z" fill="#fff" opacity=".75"/><rect x="50" y="70" width="20" height="12" rx="4" fill="#fff" opacity=".6"/></g>
+<path d="M120 116 L124.2 125.8 L134 130 L124.2 134.2 L120 144 L115.8 134.2 L106 130 L115.8 125.8 Z" fill="#bd6244" opacity=".55"/>
+<path d="M490 609 L493.3 616.7 L501 620 L493.3 623.3 L490 631 L486.7 623.3 L479 620 L486.7 616.7 Z" fill="#bd6244" opacity=".55"/>
+<path d="M500 131 L502.7 137.3 L509 140 L502.7 142.7 L500 149 L497.3 142.7 L491 140 L497.3 137.3 Z" fill="#f4ab90" opacity=".55"/>
+<circle cx="105" cy="640" r="10" fill="#f4ab90" opacity=".7"/>
+<circle cx="450" cy="90" r="8" fill="#fff" opacity=".8"/>
+</svg>

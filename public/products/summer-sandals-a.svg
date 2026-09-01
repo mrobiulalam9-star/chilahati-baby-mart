@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" role="img" aria-label="summer-sandals">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#fff4dd"/>
+<stop offset="1" stop-color="#ffe5ba"/>
+</linearGradient>
+</defs>
+<rect width="600" height="750" fill="url(#bg)"/>
+<circle cx="300" cy="345" r="185" fill="#ffffff" opacity=".5"/>
+<g transform="translate(190 235) scale(1.85) rotate(-4 60 60)" fill="#b9832f"><rect x="24" y="60" width="84" height="16" rx="8"/><path d="M38 60q22-30 56-16" stroke="#f2c87e" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M84 46q-20 2-26 14" stroke="#f2c87e" stroke-width="7" fill="none" stroke-linecap="round"/></g>
+<path d="M120 116 L124.2 125.8 L134 130 L124.2 134.2 L120 144 L115.8 134.2 L106 130 L115.8 125.8 Z" fill="#b9832f" opacity=".55"/>
+<path d="M490 609 L493.3 616.7 L501 620 L493.3 623.3 L490 631 L486.7 623.3 L479 620 L486.7 616.7 Z" fill="#b9832f" opacity=".55"/>
+<path d="M500 131 L502.7 137.3 L509 140 L502.7 142.7 L500 149 L497.3 142.7 L491 140 L497.3 137.3 Z" fill="#f2c87e" opacity=".55"/>
+<circle cx="105" cy="640" r="10" fill="#f2c87e" opacity=".7"/>
+<circle cx="450" cy="90" r="8" fill="#fff" opacity=".8"/>
+</svg>
