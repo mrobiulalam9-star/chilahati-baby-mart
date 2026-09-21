@@ -17,5 +17,6 @@ public-url.txt
 # Dev logs / build artifacts
 .dev.*
 .srv.*
-smoke-report-test.jsproxy-3000.js
+smoke-report-test.js
+proxy-3000.js
 data/admin-password.json
