@@ -3,35 +3,29 @@ import { notFound } from "next/navigation";
 import ProductGallery from "@/components/ProductGallery";
 import ProductCard from "@/components/ProductCard";
 import OrderButtons from "@/components/OrderButtons";
-import {
-  products,
-  productBySlug,
-  relatedProducts,
-  categories,
-  categoryBySlug,
-  AGE_GROUPS,
-} from "@/lib/products";
+import { categories, categoryBySlug, AGE_GROUPS } from "@/lib/products";
+import { getAllProducts, getProductBySlug, getRelatedProducts } from "@/lib/all-products";
 import { formatPrice } from "@/lib/site";
 
 type Params = Promise<{ slug: string }>;
 
 export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+  return getAllProducts().map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Params }) {
   const { slug } = await params;
-  const product = productBySlug(slug);
+  const product = getProductBySlug(slug);
   return { title: product ? product.name : "Product" };
 }
 
 export default async function ProductPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const product = productBySlug(slug);
+  const product = getProductBySlug(slug);
   if (!product) notFound();
 
   const category = categoryBySlug(product.category);
-  const related = relatedProducts(product);
+  const related = getRelatedProducts(product);
   const ageLabels = AGE_GROUPS.filter((g) => product.ages.includes(g.value));
 
   return (

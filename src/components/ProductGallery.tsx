@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 type Props = {
-  images: [string, string];
+  images: string[];
   name: string;
 };
 

@@ -7,11 +7,12 @@ import { site } from "@/lib/site";
 const NAV = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Shop" },
-  { href: "/shop?category=clothing", label: "Clothing" },
-  { href: "/shop?category=shoes", label: "Ladies Clothing" },
+  { href: "/shop?category=ladies-clothing", label: "Ladies Clothing" },
+  { href: "/shop?category=clothing", label: "Baby Clothing" },
   { href: "/shop?category=ladies-bag", label: "Ladies Bag" },
-  { href: "/about", label: "About" },
+  { href: "/shop?category=shoes", label: "Shoes" },
   { href: "/contact", label: "Contact" },
+  { href: "/about", label: "About" },
 ];
 
 export default function Header() {
@@ -26,15 +27,6 @@ export default function Header() {
 
   return (
     <>
-      <div className="bg-blush-deep text-center text-[12px] text-white/95 py-2 px-4">
-        <span className="tracking-wide">
-          কল করে অর্ডার করুন · Call to order:{" "}
-          <a href={site.phoneHref} className="font-semibold underline underline-offset-2 hover:text-white">
-            {site.phoneDisplay}
-          </a>{" "}
-          — home delivery in Chilahati &amp; nearby areas
-        </span>
-      </div>
       <header className="sticky top-0 z-40 bg-paper/95 backdrop-blur border-b border-line">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex h-16 items-center justify-between gap-4">
@@ -87,6 +79,16 @@ export default function Header() {
                 </svg>
                 Order Now
               </a>
+              <Link
+                href="/admin"
+                className="hidden sm:inline-flex items-center gap-1.5 rounded-full border-2 border-ink/20 hover:border-blush text-ink/70 hover:text-blush text-xs font-semibold px-3 py-2 transition-colors"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+                Admin
+              </Link>
             </div>
           </div>
         </div>
@@ -103,6 +105,17 @@ export default function Header() {
                 {n.label}
               </Link>
             ))}
+            <Link
+              href="/admin"
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-2 px-6 py-3.5 text-sm font-medium text-muted border-b border-line/60 hover:text-blush transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>
+              Admin
+            </Link>
           </nav>
         )}
       </header>

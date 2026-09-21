@@ -5,7 +5,7 @@ import { categories } from "@/lib/products";
 export default function Footer() {
   return (
     <footer className="bg-ink text-paper mt-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-14 grid grid-cols-2 md:grid-cols-3 gap-10">
         <div className="col-span-2 md:col-span-1">
           <p className="font-display font-bold text-xl leading-tight">
             Chilahati
@@ -45,19 +45,6 @@ export default function Footer() {
               <Link href="/shop" className="text-sm text-paper/70 hover:text-paper transition-colors">
                 All Products
               </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="text-xs uppercase tracking-[0.25em] text-blush mb-4">Visit Us</h3>
-          <ul className="space-y-2.5 text-sm text-paper/70">
-            {site.addressLines.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-            <li>
-              <a href={site.phoneHref} className="hover:text-paper transition-colors">
-                {site.phoneDisplay}
-              </a>
             </li>
           </ul>
         </div>

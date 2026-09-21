@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "",
+    "name": "কামিজ",
+    "nameBn": "কামিজ",
+    "category": "ladies-bag",
+    "price": 1250,
+    "oldPrice": 1400,
+    "ages": [],
+    "sizes": [
+      "Free size"
+    ],
+    "colors": [
+      "As per product"
+    ],
+    "images": [
+      "/products/upload_1789046468113_qa1qr1.jpeg"
+    ],
+    "description": "",
+    "descriptionBn": "ওড়না ২.৫০ হাত নামাজী ওড়না।",
+    "featured": false,
+    "stock": 50,
+    "id": "prod_1789046517895_v7ca86s",
+    "createdAt": "2026-09-10T13:21:57.895Z",
+    "updatedAt": "2026-09-10T13:21:57.895Z"
+  },
+  {
+    "slug": "ladies-bag",
+    "name": "Ladies Bag",
+    "nameBn": "Ladies Bag",
+    "category": "ladies-bag",
+    "price": 2000,
+    "ages": [],
+    "sizes": [],
+    "colors": [],
+    "images": [
+      "/products/upload_1789046831246_6ykrjj.jpg"
+    ],
+    "description": "",
+    "descriptionBn": "",
+    "featured": false,
+    "stock": 0,
+    "id": "prod_1789046836552_bg3sqg8",
+    "createdAt": "2026-09-10T13:27:16.552Z",
+    "updatedAt": "2026-09-10T13:27:16.552Z"
+  }
+]

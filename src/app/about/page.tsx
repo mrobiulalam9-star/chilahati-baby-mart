@@ -68,26 +68,6 @@ export default function AboutPage() {
               <dd className="font-display font-bold text-3xl text-blush mt-1">1k+</dd>
             </div>
           </dl>
-          <hr className="border-line my-7" />
-          <h2 className="font-display font-semibold text-lg">Visit the shop</h2>
-          <address className="not-italic mt-3 text-sm text-muted leading-relaxed">
-            {site.addressLines.map((l) => (
-              <span key={l} className="block">
-                {l}
-              </span>
-            ))}
-            {site.hours.map((h) => (
-              <span key={h.days} className="block mt-2">
-                {h.days}: {h.time}
-              </span>
-            ))}
-          </address>
-          <Link
-            href="/contact"
-            className="mt-5 inline-block rounded-full bg-blush hover:bg-blush-deep text-white text-sm font-semibold px-5 py-2.5 transition-colors"
-          >
-            Contact &amp; directions →
-          </Link>
         </div>
       </div>
 

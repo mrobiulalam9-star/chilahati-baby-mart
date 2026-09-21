@@ -3,3 +3,18 @@ node_modules/
 .env
 .env.local
 *.log
+
+# Local machine infra & tooling (never deploy these)
+supervisor.js
+supervisor.log
+cloudflared.exe
+public-url.txt
+.proxy.*
+.tunnel.*
+.supervisor.*
+.tsbuildinfo
+
+# Dev logs / build artifacts
+.dev.*
+.srv.*
+smoke-report-test.jsproxy-3000.js
