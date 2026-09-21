@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { signToken } from "@/lib/admin-auth";
+import { getAdminPassword } from "@/lib/admin-password";
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+const ADMIN_PASSWORD = getAdminPassword();
 
 function safeCompare(a: string, b: string): boolean {
   if (a.length !== b.length) return false;

@@ -18,3 +18,4 @@ public-url.txt
 .dev.*
 .srv.*
 smoke-report-test.jsproxy-3000.js
+data/admin-password.json
