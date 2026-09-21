@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { requireAdmin } from "@/lib/admin-auth";
 import { getAdminPassword, storePassword } from "@/lib/admin-password";
 
 function safeCompare(a: string, b: string): boolean {
@@ -9,9 +8,6 @@ function safeCompare(a: string, b: string): boolean {
 }
 
 export async function POST(req: NextRequest) {
-  const auth = requireAdmin(req);
-  if (auth instanceof NextResponse) return auth;
-
   try {
     const body = await req.json();
     const { currentPassword, newPassword } = body;

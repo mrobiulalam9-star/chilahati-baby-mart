@@ -20,3 +20,4 @@ public-url.txt
 smoke-report-test.js
 proxy-3000.js
 data/admin-password.json
+data/admin-smtp.json

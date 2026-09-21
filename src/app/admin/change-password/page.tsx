@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -12,14 +12,6 @@ export default function ChangePasswordPage() {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error">("error");
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/admin/auth/check")
-      .then((res) => {
-        if (!res.ok) router.push("/admin");
-      })
-      .catch(() => router.push("/admin"));
-  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,8 +130,8 @@ export default function ChangePasswordPage() {
           </form>
 
           <div className="text-center mt-4">
-            <Link href="/admin/dashboard" className="text-xs text-blush hover:text-gold transition-colors">
-              ← Back to Dashboard
+            <Link href="/admin" className="text-xs text-blush hover:text-gold transition-colors">
+              ← Back to Sign In
             </Link>
           </div>
         </div>
