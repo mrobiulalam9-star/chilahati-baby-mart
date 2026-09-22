@@ -27,7 +27,7 @@ export type Product = {
 };
 
 export const categories: Category[] = [
-  { slug: "baby-clothing", name: "Baby Collection" },
+  { slug: "baby-clothing", name: "Shop" },
   { slug: "clothing", name: "Baby Clothing" },
   { slug: "shoes", name: "Shoes" },
   { slug: "ladies-clothing", name: "Ladies Clothing" },
