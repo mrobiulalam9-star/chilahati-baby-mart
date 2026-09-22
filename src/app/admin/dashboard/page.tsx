@@ -8,7 +8,6 @@ type AdminProduct = {
   id: string;
   slug: string;
   name: string;
-  nameBn: string;
   category: string;
   price: number;
   oldPrice?: number;
@@ -17,7 +16,6 @@ type AdminProduct = {
   colors: string[];
   images: string[];
   description: string;
-  descriptionBn: string;
   featured: boolean;
   stock: number;
   createdAt: string;
@@ -27,15 +25,14 @@ type AdminProduct = {
 };
 
 const AGE_GROUP_OPTIONS = [
-  { value: "0-6m", label: "0–6 months", labelBn: "০–৬ মাস" },
-  { value: "6-12m", label: "6–12 months", labelBn: "৬–১২ মাস" },
-  { value: "1-2y", label: "1–2 years", labelBn: "১–২ বছর" },
-  { value: "2-4y", label: "2–4 years", labelBn: "২–৪ বছর" },
+  { value: "0-6m", label: "0–6 months" },
+  { value: "6-12m", label: "6–12 months" },
+  { value: "1-2y", label: "1–2 years" },
+  { value: "2-4y", label: "2–4 years" },
 ];
 
 type FormData = {
   name: string;
-  nameBn: string;
   category: string;
   price: string;
   oldPrice: string;
@@ -43,14 +40,12 @@ type FormData = {
   sizes: string;
   colors: string;
   description: string;
-  descriptionBn: string;
   featured: boolean;
   stock: string;
 };
 
 const emptyForm: FormData = {
   name: "",
-  nameBn: "",
   category: categories[0]?.slug || "clothing",
   price: "",
   oldPrice: "",
@@ -58,7 +53,6 @@ const emptyForm: FormData = {
   sizes: "",
   colors: "",
   description: "",
-  descriptionBn: "",
   featured: false,
   stock: "50",
 };
@@ -169,7 +163,6 @@ export default function AdminDashboardPage() {
   const handleEdit = (product: AdminProduct) => {
     setForm({
       name: product.name,
-      nameBn: product.nameBn,
       category: product.category,
       price: String(product.price),
       oldPrice: product.oldPrice ? String(product.oldPrice) : "",
@@ -177,7 +170,6 @@ export default function AdminDashboardPage() {
       sizes: product.sizes.join(", "),
       colors: product.colors.join(", "),
       description: product.description,
-      descriptionBn: product.descriptionBn,
       featured: product.featured,
       stock: String(product.stock),
     });
@@ -194,7 +186,6 @@ export default function AdminDashboardPage() {
     try {
       const payload = {
         name: form.name,
-        nameBn: form.nameBn,
         category: form.category,
         price: Number(form.price),
         oldPrice: form.oldPrice ? Number(form.oldPrice) : undefined,
@@ -203,7 +194,6 @@ export default function AdminDashboardPage() {
         colors: form.colors.split(",").map((c) => c.trim()).filter(Boolean),
         images: uploadedImages,
         description: form.description,
-        descriptionBn: form.descriptionBn,
         featured: form.featured,
         stock: Number(form.stock),
       };
@@ -272,7 +262,7 @@ export default function AdminDashboardPage() {
   };
 
   const filteredProducts = products.filter((p) => {
-    const matchesSearch = !searchTerm || p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.nameBn.includes(searchTerm);
+    const matchesSearch = !searchTerm || p.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = !filterCategory || p.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
@@ -407,18 +397,6 @@ export default function AdminDashboardPage() {
                   />
                 </div>
 
-                {/* Name BN */}
-                <div>
-                  <label className="block text-xs uppercase tracking-widest text-muted mb-2">Product Name (Bengali)</label>
-                  <input
-                    type="text"
-                    value={form.nameBn}
-                    onChange={(e) => setForm((f) => ({ ...f, nameBn: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl border border-line focus:border-blush focus:outline-none transition-colors"
-                    placeholder="e.g. কটন রম্পার"
-                  />
-                </div>
-
                 {/* Category */}
                 <div>
                   <label className="block text-xs uppercase tracking-widest text-muted mb-2">Category *</label>
@@ -430,7 +408,7 @@ export default function AdminDashboardPage() {
                   >
                     {categories.map((c) => (
                       <option key={c.slug} value={c.slug}>
-                        {c.name} ({c.nameBn})
+                        {c.name}
                       </option>
                     ))}
                   </select>
@@ -517,7 +495,7 @@ export default function AdminDashboardPage() {
                           : "border-line bg-white hover:border-blush"
                       }`}
                     >
-                      {g.label} <span className="opacity-80">({g.labelBn})</span>
+                      {g.label}
                     </button>
                   ))}
                 </div>
@@ -587,7 +565,7 @@ export default function AdminDashboardPage() {
               </div>
 
               {/* Description */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div>
                 <div>
                   <label className="block text-xs uppercase tracking-widest text-muted mb-2">Description (English)</label>
                   <textarea
@@ -595,15 +573,6 @@ export default function AdminDashboardPage() {
                     onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                     className="w-full px-4 py-3 rounded-xl border border-line focus:border-blush focus:outline-none transition-colors min-h-[120px]"
                     placeholder="Product description in English..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs uppercase tracking-widest text-muted mb-2">Description (Bengali)</label>
-                  <textarea
-                    value={form.descriptionBn}
-                    onChange={(e) => setForm((f) => ({ ...f, descriptionBn: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl border border-line focus:border-blush focus:outline-none transition-colors min-h-[120px]"
-                    placeholder="পণ্যের বিবরণ বাংলায়..."
                   />
                 </div>
               </div>
@@ -691,7 +660,6 @@ export default function AdminDashboardPage() {
                           )}
                           <div>
                             <p className={`font-semibold text-sm ${product.hidden ? "line-through opacity-60" : ""}`}>{product.name}</p>
-                            <p className="text-xs text-muted">{product.nameBn}</p>
                             {product.hidden ? (
                               <span className="inline-block mt-1 text-[10px] uppercase tracking-wide text-red-600 bg-red-50 px-1.5 py-0.5 rounded">Removed</span>
                             ) : product.source === "static" ? (

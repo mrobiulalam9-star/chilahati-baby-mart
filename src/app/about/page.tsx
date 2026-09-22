@@ -4,17 +4,14 @@ import { site } from "@/lib/site";
 const VALUES = [
   {
     title: "Quality First",
-    titleBn: "মানের কথা",
     desc: "Every piece is hand-checked for fabric, stitching and safety before it reaches the shelf.",
   },
   {
     title: "Fair Prices",
-    titleBn: "সাশ্রয়ী দাম",
     desc: "Direct sourcing keeps prices honest — quality babywear should not be a luxury.",
   },
   {
     title: "Parent Trusted",
-    titleBn: "অভিভাবকদের ভরসা",
     desc: "Families across Chilahati and Dimla come back to us for every new arrival.",
   },
 ];
@@ -25,7 +22,7 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
       <header className="max-w-2xl">
-        <p className="text-blush-deep font-semibold tracking-wide">আমাদের গল্প</p>
+        <p className="text-blush-deep font-semibold tracking-wide">Our Story</p>
         <h1 className="font-display font-bold text-4xl leading-tight mt-2">
           Born in Chilahati, dressing little stars.
         </h1>
@@ -40,16 +37,12 @@ export default function AboutPage() {
             stop for families from Dimla and beyond.
           </p>
           <p>
-            চিলাহাটি বাজারের একটি ছোট্ট দোকান থেকে আমাদের যাত্রা শুরু। আজ দিল্লার-নয়,
-            দিমলা-জুড়ে শত শত পরিবার তাদের সোনামণির পোশাক খোঁজে আমাদের কাছেই।
-          </p>
-          <p>
             We personally select every romper, frock, bootie and bib — feeling the fabric,
             testing the snaps and imagining how it will survive real baby life. If we would not
             dress our own children in it, we do not sell it.
           </p>
           <p className="text-ink font-medium">
-            {site.tagline}. {site.taglineBn}।
+            {site.tagline}.
           </p>
         </div>
 
@@ -75,7 +68,7 @@ export default function AboutPage() {
         {VALUES.map((v) => (
           <div key={v.title} className="rounded-3xl border border-line bg-white p-6">
             <h3 className="font-display font-bold text-lg">
-              {v.title} <span className="text-muted text-sm font-normal">· {v.titleBn}</span>
+              {v.title}
             </h3>
             <p className="mt-2 text-sm text-muted leading-relaxed">{v.desc}</p>
           </div>

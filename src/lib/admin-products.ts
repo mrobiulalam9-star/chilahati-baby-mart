@@ -5,7 +5,6 @@ export type AdminProduct = {
   id: string;
   slug: string;
   name: string;
-  nameBn: string;
   category: string;
   price: number;
   oldPrice?: number;
@@ -14,7 +13,6 @@ export type AdminProduct = {
   colors: string[];
   images: string[];
   description: string;
-  descriptionBn: string;
   featured: boolean;
   stock: number;
   createdAt: string;

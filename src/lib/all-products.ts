@@ -8,7 +8,6 @@ export type AdminProduct = {
   id: string;
   slug: string;
   name: string;
-  nameBn: string;
   category: string;
   price: number;
   oldPrice?: number;
@@ -17,7 +16,6 @@ export type AdminProduct = {
   colors: string[];
   images: string[];
   description: string;
-  descriptionBn: string;
   featured: boolean;
   stock: number;
   createdAt: string;
@@ -42,7 +40,6 @@ function adminToProduct(admin: AdminProduct): Product {
   return {
     slug: admin.slug,
     name: admin.name,
-    nameBn: admin.nameBn,
     category: admin.category,
     price: admin.price,
     oldPrice: admin.oldPrice,
@@ -51,7 +48,6 @@ function adminToProduct(admin: AdminProduct): Product {
     colors: admin.colors,
     images: [img1, img2] as [string, string],
     description: admin.description,
-    descriptionBn: admin.descriptionBn,
     featured: admin.featured,
   };
 }
@@ -64,7 +60,6 @@ function applyOverrides(p: Product): Product {
   return {
     ...p,
     name: o.name ?? p.name,
-    nameBn: o.nameBn ?? p.nameBn,
     price: o.price ?? p.price,
     oldPrice: o.oldPrice ?? p.oldPrice,
     images: [img1, img2],

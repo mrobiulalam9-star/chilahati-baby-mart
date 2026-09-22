@@ -47,7 +47,6 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
       }
       const updates: Parameters<typeof setStaticOverride>[1] = {};
       if (body.name !== undefined) updates.name = body.name;
-      if (body.nameBn !== undefined) updates.nameBn = body.nameBn;
       if (body.price !== undefined) updates.price = Number(body.price);
       if (body.oldPrice !== undefined) updates.oldPrice = body.oldPrice ? Number(body.oldPrice) : undefined;
       if (body.images !== undefined) updates.images = body.images;
@@ -55,7 +54,6 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
       if (body.sizes !== undefined) updates.sizes = body.sizes;
       if (body.colors !== undefined) updates.colors = body.colors;
       if (body.description !== undefined) updates.description = body.description;
-      if (body.descriptionBn !== undefined) updates.descriptionBn = body.descriptionBn;
       if (body.featured !== undefined) updates.featured = Boolean(body.featured);
 
       setStaticOverride(slug, updates);
@@ -65,7 +63,6 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
           id,
           slug,
           name: o.name ?? base.name,
-          nameBn: o.nameBn ?? base.nameBn,
           category: base.category,
           price: o.price ?? base.price,
           oldPrice: o.oldPrice ?? base.oldPrice,
@@ -74,7 +71,6 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
           colors: o.colors ?? base.colors,
           images: o.images?.length ? o.images : [...base.images],
           description: o.description ?? base.description,
-          descriptionBn: o.descriptionBn ?? base.descriptionBn,
           featured: o.featured ?? (base.featured || false),
           stock: 999,
           source: "static",
@@ -89,7 +85,6 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
       updates.name = body.name;
       updates.slug = slugify(body.name);
     }
-    if (body.nameBn !== undefined) updates.nameBn = body.nameBn;
     if (body.category !== undefined) updates.category = body.category;
     if (body.price !== undefined) updates.price = Number(body.price);
     if (body.oldPrice !== undefined) updates.oldPrice = body.oldPrice ? Number(body.oldPrice) : undefined;
@@ -98,7 +93,6 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
     if (body.colors !== undefined) updates.colors = body.colors;
     if (body.images !== undefined) updates.images = body.images;
     if (body.description !== undefined) updates.description = body.description;
-    if (body.descriptionBn !== undefined) updates.descriptionBn = body.descriptionBn;
     if (body.featured !== undefined) updates.featured = Boolean(body.featured);
     if (body.stock !== undefined) updates.stock = Number(body.stock);
 

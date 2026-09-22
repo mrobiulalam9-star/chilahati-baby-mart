@@ -1,8 +1,6 @@
 export const site = {
   name: "Chilahati Ladies and Baby Mart",
-  nameBn: "চিলাহাটি লেডিস অ্যান্ড বেবি মার্ট",
   tagline: "Little smiles start here",
-  taglineBn: "সোনামণির পোশাকে আপনার বিশ্বস্ত ঠিকানা",
   phoneDisplay: "01933-396237",
   phoneHref: "tel:+8801933396237",
   whatsappNumber: "8801933396237",

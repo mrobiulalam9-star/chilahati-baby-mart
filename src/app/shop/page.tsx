@@ -45,7 +45,7 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
         </div>
         {list.length === 0 ? (
           <div className="py-24 text-center space-y-3">
-            <p className="font-display font-semibold text-2xl">এই ফিল্টারে কোনো পণ্য নেই।</p>
+            <p className="font-display font-semibold text-2xl">No products match these filters.</p>
             <p className="text-muted text-sm">Try broadening your selection.</p>
           </div>
         ) : (

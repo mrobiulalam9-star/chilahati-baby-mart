@@ -7,7 +7,7 @@ import { getAllProducts } from "@/lib/all-products";
 const TESTIMONIALS = [
   {
     quote:
-      "আমার মেয়ের ঈদের ফ্রক এখান থেকেই নিয়েছি। কাপড়ের কোয়ালিটি দেখে সত্যিই মুগ্ধ!",
+      "I bought my daughter's Eid frock from here. Really impressed with the fabric quality!",
     name: "Rumana Akter",
     place: "Chilahati",
   },
@@ -19,7 +19,7 @@ const TESTIMONIALS = [
   },
   {
     quote:
-      "ফোনে অর্ডার দিলাম, সেইম দিনেই ডেলিভারি পেয়ে গেছি। দামও অনেক ঠিকঠাক।",
+      "I ordered over the phone and got delivery the very same day. The price is also very reasonable.",
     name: "Shahida Parvin",
     place: "Khalisha Chapani",
   },
@@ -36,7 +36,7 @@ return (
         <div className="flex items-end justify-between mb-8">
           <div>
             <h2 className="font-display font-bold text-3xl">All Products</h2>
-            <p className="text-muted mt-1">সব পণ্য — এক নজরে</p>
+            <p className="text-muted mt-1">All products — at a glance</p>
           </div>
           <span className="hidden sm:inline-block text-sm font-semibold text-muted">{allProducts.length} items</span>
         </div>
@@ -61,7 +61,7 @@ return (
           <div className="flex items-end justify-between mb-8">
             <div>
               <h2 className="font-display font-bold text-3xl">Shop by Category</h2>
-              <p className="text-muted mt-1">আপনার প্রয়োজন অনুযায়ী ক্যাটাগরি বেছে নিন</p>
+              <p className="text-muted mt-1">Pick a category that suits your needs</p>
             </div>
             <Link href="/shop" className="hidden sm:inline-block text-sm font-semibold text-blush hover:text-blush-deep transition-colors">
               View all →
@@ -88,7 +88,6 @@ return (
                   </div>
                   <div className="p-4">
                     <h3 className="font-display font-semibold group-hover:text-blush transition-colors">{c.name}</h3>
-                    <p className="text-sm text-muted">{c.nameBn}</p>
                   </div>
                 </Link>
               );
@@ -102,7 +101,7 @@ return (
         <div className="flex items-end justify-between mb-8">
           <div>
             <h2 className="font-display font-bold text-3xl">Featured Products</h2>
-            <p className="text-muted mt-1">এই সপ্তাহের বিশেষ পণ্য</p>
+            <p className="text-muted mt-1">This week&apos;s special picks</p>
           </div>
           <Link href="/shop" className="hidden sm:inline-block text-sm font-semibold text-blush hover:text-blush-deep transition-colors">
             Shop all →
@@ -128,7 +127,7 @@ return (
         <div className="rounded-3xl bg-blush-deep text-white px-6 py-12 sm:px-12 text-center">
           <h2 className="font-display font-bold text-3xl">Need help choosing a size?</h2>
           <p className="mt-2 text-white/85">
-            আপনার সোনামণির বয়স ও হাইট বলুন — আমরা পারফেক্ট সাইজটি বেছে দিব।
+            Tell us your little one&apos;s age and height — we&apos;ll pick the perfect size.
           </p>
           <div className="mt-7 flex justify-center">
             <OrderButtons />

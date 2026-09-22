@@ -4,14 +4,12 @@ import path from "path";
 export type StaticOverride = {
   slug: string;
   name?: string;
-  nameBn?: string;
   price?: number;
   oldPrice?: number;
   ages?: string[];
   sizes?: string[];
   colors?: string[];
   description?: string;
-  descriptionBn?: string;
   featured?: boolean;
   images?: string[];
   updatedAt: string;

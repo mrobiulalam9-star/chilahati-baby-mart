@@ -20,11 +20,11 @@ const quicksand = Quicksand({
 
 export const metadata: Metadata = {
   title: {
-    default: "Chilahati Ladies and Baby Mart — শিশুতোষ পোশাক ও ফ্যাশন",
+    default: "Chilahati Ladies and Baby Mart",
     template: "%s · Chilahati Ladies and Baby Mart",
   },
   description:
-    "Chilahati Ladies and Baby Mart — quality ladies and baby clothing, shoes, caps and accessories at Chilahati Bazar, Dimla. সোনামণির পোশাকে আপনার বিশ্বস্ত ঠিকানা। Call to order with home delivery.",
+    "Chilahati Ladies and Baby Mart — quality ladies and baby clothing, shoes, caps and accessories at Chilahati Bazar, Dimla. Your trusted address for kids' wear. Call to order with home delivery.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

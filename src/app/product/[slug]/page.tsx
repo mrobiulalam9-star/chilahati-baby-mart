@@ -48,7 +48,6 @@ export default async function ProductPage({ params }: { params: Params }) {
         <div className="lg:sticky lg:top-28">
           <p className="text-xs uppercase tracking-[0.3em] text-blush-deep mb-3">{category?.name}</p>
           <h1 className="font-display font-bold text-3xl sm:text-4xl leading-tight">{product.name}</h1>
-          <p className="text-muted mt-1">{product.nameBn}</p>
 
           <p className="mt-4 flex items-baseline gap-3">
             <span className="text-2xl font-bold">{formatPrice(product.price)}</span>
@@ -61,15 +60,12 @@ export default async function ProductPage({ params }: { params: Params }) {
               </>
             )}
           </p>
-          <p className="text-xs text-muted mt-1">দাম টাকায় · Cash on delivery available</p>
+          <p className="text-xs text-muted mt-1">Price in Taka · Cash on delivery available</p>
 
           <div className="mt-7 space-y-4 text-sm">
             <p>
               <span className="font-semibold">Age:</span>{" "}
-              {ageLabels.map((g) => g.label).join(", ")}{" "}
-              <span className="text-muted">
-                ({ageLabels.map((g) => g.labelBn).join(", ")})
-              </span>
+              {ageLabels.map((g) => g.label).join(", ")}
             </p>
             <p>
               <span className="font-semibold">Available sizes:</span>{" "}
@@ -85,7 +81,6 @@ export default async function ProductPage({ params }: { params: Params }) {
           </div>
 
           <p className="mt-6 text-muted leading-relaxed">{product.description}</p>
-          <p className="mt-2 text-muted leading-relaxed">{product.descriptionBn}</p>
 
           <div className="mt-8">
             <OrderButtons productName={`${product.name} — ${formatPrice(product.price)}`} />
@@ -101,7 +96,7 @@ export default async function ProductPage({ params }: { params: Params }) {
               </summary>
               <p className="pt-3 text-muted leading-relaxed">
                 Skin-friendly fabric, tested stitching and baby-safe colors. Gentle machine wash or hand
-                wash in cold water; dry in shade. নরম কাপড়, শিশুর ত্বকের জন্য ১০০% নিরাপদ।
+                wash in cold water; dry in shade.
               </p>
             </details>
             <details className="group py-4">
@@ -110,8 +105,7 @@ export default async function ProductPage({ params }: { params: Params }) {
               </summary>
               <p className="pt-3 text-muted leading-relaxed">
                 Home delivery across Chilahati bazar area; courier delivery all over Bangladesh (charges
-                apply). Wrong size? Exchange within 3 days with the receipt. চিলাহাটি এলাকায় হোম ডেলিভারি,
-                সারা দেশে কুরিয়ারে পাঠানো হয়।
+                apply). Wrong size? Exchange within 3 days with the receipt.
               </p>
             </details>
           </div>

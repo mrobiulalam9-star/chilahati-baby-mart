@@ -7,10 +7,10 @@ import { categories } from "@/lib/products";
 type Msg = { from: "bot" | "user"; text: string };
 
 const QUICK = [
-  "ডেলিভারি চার্জ কত?",
-  "খোলার সময় কী?",
-  "ঠিকানা কী?",
-  "অর্ডার করতে চাই",
+  "What is the delivery charge?",
+  "What are your opening hours?",
+  "Where is your address?",
+  "I want to place an order",
 ];
 
 const SUGGESTIONS = categories
@@ -21,28 +21,28 @@ const SUGGESTIONS = categories
 function botReply(input: string): string {
   const t = input.toLowerCase();
 
-  if (/address|ঠিকানা|কোথায়|location/.test(t)) {
-    return `আমাদের ঠিকানা: ${site.addressShort}। Google Maps এ দেখতে চাইলে নিচের WhatsApp লিংকে মেসেজ করুন।`;
+  if (/address|location|where/.test(t)) {
+    return `Our address: ${site.addressShort}. Message us via the WhatsApp link below to open it in Google Maps.`;
   }
-  if (/deliver|shipping|ডেলিভারি|চার্জ|ডাক/.test(t)) {
-    return "আমরা চিলাহাটি বাজার এলাকায় হোম ডেলিভারি দিয়ে থাকি। ডেলিভারি চার্জ জানতে বা অর্ডার করতে কল করুন 👉 " + site.phoneDisplay;
+  if (/deliver|shipping|charge|fee|courier/.test(t)) {
+    return "We offer home delivery around Chilahati Bazar. Call us for the delivery charge or to place an order 👉 " + site.phoneDisplay;
   }
-  if (/hour|time|খোলা|সময়|open|close/.test(t)) {
-    return `আমাদের দোকানের সময়:\n${site.hours.map((h) => `${h.days}: ${h.time}`).join("\n")}`;
+  if (/hour|time|open|close|when/.test(t)) {
+    return `Our shop hours:\n${site.hours.map((h) => `${h.days}: ${h.time}`).join("\n")}`;
   }
-  if (/order|অর্ডার|কিনতে|কেনা|buy|কি.মু/.test(t)) {
-    return `অর্ডার করতে কল অথবা WhatsApp করুন:\n📞 ${site.phoneDisplay}\n\nনিচের "WhatsApp এ চ্যাট" বাটন চেপে সরাসরি মেসেজও পাঠাতে পারবেন।`;
+  if (/order|buy|purchase/.test(t)) {
+    return `To place an order, call or WhatsApp us:\n📞 ${site.phoneDisplay}\n\nYou can also send a message directly using the "Chat on WhatsApp" button below.`;
   }
-  if (/shop|product|পণ্য|প্রোডাক্ট|what.*sell|আছ[ে]\s*কি/.test(t)) {
-    return `আমাদের দোকানে আছে: ${SUGGESTIONS} সহ আরও অনেক কিছু। /shop পেজে ঘুরে দেখুন!`;
+  if (/shop|product|sell|available/.test(t)) {
+    return `We carry ${SUGGESTIONS} and much more. Browse the /shop page to explore!`;
   }
-  if (/price|দাম|মূল্য/.test(t)) {
-    return "সব পণ্যের দাম শপ পেজে দেখানো আছে। আপডেটেড দাম জানতে নিচের WhatsApp বাটনে চাপ দিন।";
+  if (/price|cost|rate/.test(t)) {
+    return "Prices for all products are shown on the shop page. For the latest price, tap the WhatsApp button below.";
   }
-  if (/hi|hello|assalam|আসসালাম|হ্যালো|হাই/.test(t)) {
-    return `ওয়ালাইকুম আসসালাম! 🙏 চিলাহাটি লেডিস অ্যান্ড বেবি মার্টে স্বাগতম। কীভাবে সাহায্য করতে পারি?`;
+  if (/hi|hello|assalam|hey|salam/.test(t)) {
+    return `Wa Alaikum Assalam! 🙏 Welcome to Chilahati Ladies and Baby Mart. How can I help you?`;
   }
-  return `আমি বুঝতে পারিনি 😊 দয়া করে নিচের অপশনগুলো থেকে বেছে নিন, অথবা সরাসরি কল করুন ${site.phoneDisplay}। মানুষজন উত্তর দিবে!`;
+  return `Sorry, I didn't understand that 😊 Please choose from the options below, or call ${site.phoneDisplay} and a real person will help!`;
 }
 
 export default function Chatbot() {
@@ -51,7 +51,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Msg[]>([
     {
       from: "bot",
-      text: `আসসালামু আলাইকুম! 👋 ${site.nameBn} এ স্বাগতম। পণ্য, ডেলিভারি বা অর্ডার নিয়ে প্রশ্ন থাকলে লিখুন।`,
+      text: `Assalamu Alaikum! 👋 Welcome to ${site.name}. Ask us about products, delivery, or orders.`,
     },
   ]);
 
@@ -88,8 +88,8 @@ export default function Chatbot() {
                 </svg>
               </span>
               <div>
-                <p className="text-sm font-semibold leading-tight">Chatbot · সহায়তা</p>
-                <p className="text-xs text-white/70 leading-tight">সাধারণত সাথে সাথে উত্তর দেয়</p>
+                <p className="text-sm font-semibold leading-tight">Chatbot · Help</p>
+                <p className="text-xs text-white/70 leading-tight">Usually replies instantly</p>
               </div>
             </div>
             <button
@@ -131,7 +131,7 @@ export default function Chatbot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send(input)}
-              placeholder="মেসেজ লিখুন..."
+              placeholder="Type a message..."
               className="flex-1 rounded-full border border-line px-4 py-2 text-sm outline-none placeholder:text-muted focus:border-blush"
             />
             <button
@@ -148,7 +148,7 @@ export default function Chatbot() {
           </div>
 
           <a
-            href={waLink("আসসালামু আলাইকুম! আমি chatbot থেকে সহায়তা নিতে চাই।")}
+            href={waLink("Assalamu Alaikum! I would like help from the chatbot.")}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 border-t border-line bg-cream py-2.5 text-xs font-semibold text-mint hover:bg-mint hover:text-white transition-colors"
@@ -156,7 +156,7 @@ export default function Chatbot() {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91A9.86 9.86 0 0 0 12.04 2z" />
             </svg>
-            WhatsApp এ চ্যাট করুন
+            Chat on WhatsApp
           </a>
         </div>
       )}

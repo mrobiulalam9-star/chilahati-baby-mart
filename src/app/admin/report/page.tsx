@@ -77,7 +77,7 @@ export default function ReportPage() {
             <img src="/logo.jpg" alt="Logo" className="w-9 h-9 rounded-full object-cover" />
             <div>
               <h1 className="font-display font-bold text-lg leading-none">Report Studio</h1>
-              <p className="text-xs text-muted">রিপোর্ট তৈরি করুন</p>
+              <p className="text-xs text-muted">Create a report</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -119,7 +119,7 @@ export default function ReportPage() {
           <h2 className="font-display font-bold text-2xl mb-2">Generate Report</h2>
           <p className="text-muted text-sm mb-6">
             Upload an Excel spreadsheet or a PDF file. A formatted report will be generated and saved
-            to your Desktop as <span className="font-mono text-ink">রিপোর্ট.pdf</span>.
+            to your Desktop as <span className="font-mono text-ink">report.pdf</span>.
           </p>
 
           <div className="flex items-center gap-4">
@@ -239,7 +239,7 @@ export default function ReportPage() {
                   <polyline points="7 10 12 15 17 10" />
                   <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
-                Download রিপোর্ট.pdf
+                Download report.pdf
               </a>
             </div>
           </div>

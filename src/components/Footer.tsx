@@ -13,7 +13,7 @@ export default function Footer() {
             <span className="text-blush">Ladies &amp; Baby Mart</span>
           </p>
           <p className="mt-3 text-sm text-paper/60 leading-relaxed">
-            {site.taglineBn}। নবজাতক থেকে ৪ বছর — সব বয়সের জন্য মানসম্পন্ন শিশুতোষ পোশাক ও ফ্যাশন।
+            {site.tagline}. From newborns to 4 years — quality kids&apos; clothing and fashion for every age.
           </p>
         </div>
         <div>
@@ -52,7 +52,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-paper/50">
           <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
-          <p>{site.nameBn} · {site.addressShort}</p>
+          <p>{site.addressShort}</p>
         </div>
       </div>
     </footer>

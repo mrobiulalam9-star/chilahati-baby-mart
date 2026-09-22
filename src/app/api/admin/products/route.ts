@@ -14,7 +14,6 @@ export type DashboardProduct = {
   id: string;
   slug: string;
   name: string;
-  nameBn: string;
   category: string;
   price: number;
   oldPrice?: number;
@@ -23,7 +22,6 @@ export type DashboardProduct = {
   colors: string[];
   images: string[];
   description: string;
-  descriptionBn: string;
   featured: boolean;
   stock: number;
   source: "static" | "admin";
@@ -38,7 +36,6 @@ function staticToDashboard(p: (typeof staticProducts)[0], hidden: boolean): Dash
     id: `static_${p.slug}`,
     slug: p.slug,
     name: o?.name ?? p.name,
-    nameBn: o?.nameBn ?? p.nameBn,
     category: p.category,
     price: o?.price ?? p.price,
     oldPrice: o?.oldPrice ?? p.oldPrice,
@@ -47,7 +44,6 @@ function staticToDashboard(p: (typeof staticProducts)[0], hidden: boolean): Dash
     colors: o?.colors ?? p.colors,
     images: o?.images?.length ? [...o.images] : [...p.images],
     description: o?.description ?? p.description,
-    descriptionBn: o?.descriptionBn ?? p.descriptionBn,
     featured: o?.featured ?? (p.featured || false),
     stock: 999,
     source: "static",
@@ -87,7 +83,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const {
       name,
-      nameBn,
       category,
       price,
       oldPrice,
@@ -96,7 +91,6 @@ export async function POST(req: NextRequest) {
       colors,
       images,
       description,
-      descriptionBn,
       featured,
       stock,
     } = body;
@@ -112,7 +106,6 @@ export async function POST(req: NextRequest) {
     const product = createAdminProduct({
       slug,
       name,
-      nameBn: nameBn || "",
       category,
       price: Number(price),
       oldPrice: oldPrice ? Number(oldPrice) : undefined,
@@ -121,7 +114,6 @@ export async function POST(req: NextRequest) {
       colors: colors || [],
       images: images || [],
       description: description || "",
-      descriptionBn: descriptionBn || "",
       featured: Boolean(featured),
       stock: Number(stock) || 0,
     });

@@ -1,8 +1,7 @@
 [
   {
     "slug": "",
-    "name": "কামিজ",
-    "nameBn": "কামিজ",
+    "name": "Kamiz",
     "category": "ladies-bag",
     "price": 1250,
     "oldPrice": 1400,
@@ -16,8 +15,7 @@
     "images": [
       "/products/upload_1789046468113_qa1qr1.jpeg"
     ],
-    "description": "",
-    "descriptionBn": "ওড়না ২.৫০ হাত নামাজী ওড়না।",
+"description": "A 2.5-yard namazi orna for prayer.",
     "featured": false,
     "stock": 50,
     "id": "prod_1789046517895_v7ca86s",
@@ -27,7 +25,6 @@
   {
     "slug": "ladies-bag",
     "name": "Ladies Bag",
-    "nameBn": "Ladies Bag",
     "category": "ladies-bag",
     "price": 2000,
     "ages": [],
@@ -37,7 +34,6 @@
       "/products/upload_1789046831246_6ykrjj.jpg"
     ],
     "description": "",
-    "descriptionBn": "",
     "featured": false,
     "stock": 0,
     "id": "prod_1789046836552_bg3sqg8",

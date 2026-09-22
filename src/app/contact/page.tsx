@@ -5,16 +5,14 @@ export const metadata = { title: "Contact" };
 const CARDS = [
   {
     title: "Call Us",
-    titleBn: "ফোন করুন",
     lines: [site.phoneDisplay],
     href: site.phoneHref,
     cta: "Tap to call",
   },
   {
     title: "WhatsApp",
-    titleBn: "হোয়াটসঅ্যাপ",
     lines: [site.phoneDisplay],
-    href: waLink("আসসালামু আলাইকুম! আমি পণ্য অর্ডার করতে চাই।"),
+    href: waLink("Assalamu Alaikum! I would like to place an order."),
     cta: "Message us",
   },
 ];
@@ -23,13 +21,13 @@ export default function ContactPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
       <header className="max-w-2xl">
-        <p className="text-blush-deep font-semibold tracking-wide">যোগাযোগ</p>
+        <p className="text-blush-deep font-semibold tracking-wide">Contact</p>
         <h1 className="font-display font-bold text-4xl leading-tight mt-2">
           We are one call away.
         </h1>
         <p className="text-muted mt-3 leading-relaxed">
-          পণ্য সম্পর্কে জানতে, দাম বা স্টক কনফার্ম করতে — যেকোনো সময় কল বা WhatsApp করুন।
-          অথবা সরাসরি চলে আসুন চিলাহাটি বাজারে।
+          For questions about products, prices or stock — call or WhatsApp us anytime.
+          Or simply drop by our shop at Chilahati Bazar.
         </p>
       </header>
 
@@ -43,7 +41,6 @@ export default function ContactPage() {
             className="group rounded-3xl border border-line bg-white p-7 hover:border-blush transition-colors"
           >
             <h2 className="font-display font-bold text-xl group-hover:text-blush transition-colors">{c.title}</h2>
-            <p className="text-sm text-muted">{c.titleBn}</p>
             <div className="mt-4 text-sm space-y-1">
               {c.lines.map((l) => (
                 <p key={l}>{l}</p>
@@ -58,7 +55,7 @@ export default function ContactPage() {
         <div className="grid md:grid-cols-[1fr_auto] gap-8 items-center">
           <div>
             <h2 className="font-display font-bold text-2xl sm:text-3xl">
-              Ready to order? অর্ডার করতে প্রস্তুত?
+              Ready to order?
             </h2>
             <p className="mt-2 text-paper/70 text-sm leading-relaxed max-w-lg">
               Call or message us with your product, size and address. We confirm stock instantly and
@@ -73,7 +70,7 @@ export default function ContactPage() {
               Call {site.phoneDisplay}
             </a>
             <a
-              href={waLink("আসসালামু আলাইকুম! আমি পণ্য অর্ডার করতে চাই।")}
+              href={waLink("Assalamu Alaikum! I would like to place an order.")}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full border border-paper/40 hover:border-paper font-semibold px-7 py-3 text-center transition-colors"

@@ -47,7 +47,7 @@ function setupPdfmake() {
 
 export function getReportStorage(): { dir: string; file: string; filePath: string } {
   const dir = process.env.REPORT_DIR || path.join(os.homedir(), "Desktop");
-  const file = process.env.REPORT_FILE || "রিপোর্ট.pdf";
+  const file = process.env.REPORT_FILE || "report.pdf";
   return { dir, file, filePath: path.join(dir, file) };
 }
 
@@ -101,7 +101,7 @@ function baseDocument(content: unknown[]) {
     pageSize: "A4",
     pageMargins: [40, 50, 40, 55] as [number, number, number, number],
     defaultStyle: { font: "Arial", fontSize: 9, color: "#2b2623" },
-    info: { title: "রিপোর্ট", author: "Chilahati Ladies and Baby Mart" },
+    info: { title: "Report", author: "Chilahati Ladies and Baby Mart" },
     content,
     footer: (
       currentPage: number,
@@ -109,7 +109,7 @@ function baseDocument(content: unknown[]) {
     ) => ({
       margin: [40, 6, 40, 6] as [number, number, number, number],
       columns: [
-        { text: "চিলাহাটি লেডিস অ্যান্ড বেবি মার্ট", font: "Nirmala", fontSize: 7.5, color: "#a17662", alignment: "left" },
+        { text: "Chilahati Ladies and Baby Mart", fontSize: 7.5, color: "#a17662", alignment: "left" },
         { text: `Page ${currentPage} of ${pageCount}`, font: "Arial", fontSize: 7.5, color: "#a17662", alignment: "right" },
       ],
     }),
@@ -119,7 +119,7 @@ function baseDocument(content: unknown[]) {
 function titleBlock(title: string, metaLines: string[]) {
   return [
     { text: title, fontSize: 17, bold: true, color: "#4e2f23" },
-    { text: "রিপোর্ট", font: "Nirmala", fontSize: 13, color: "#8a6d62", margin: [0, 2, 0, 12] },
+    { text: "Report", fontSize: 13, color: "#8a6d62", margin: [0, 2, 0, 12] },
     { text: metaLines.join("   •   "), fontSize: 8.5, color: "#7a6a63", margin: [0, 0, 0, 12] },
   ];
 }

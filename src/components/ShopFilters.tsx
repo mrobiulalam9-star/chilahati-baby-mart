@@ -83,7 +83,6 @@ export default function ShopFilters() {
                 }`}
               >
                 {c.name}
-                <span className="block text-xs text-muted">{c.nameBn}</span>
               </button>
             </li>
           ))}
@@ -104,7 +103,7 @@ export default function ShopFilters() {
                   : "border-line bg-white hover:border-blush"
               }`}
             >
-              {g.labelBn}
+              {g.label}
             </button>
           ))}
         </div>
