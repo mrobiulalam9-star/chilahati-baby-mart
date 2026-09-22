@@ -6,7 +6,6 @@ export const site = {
   whatsappNumber: "8801933396237",
   email: "hello@chilahatiladiesandbabymart.com",
   addressLines: ["Chilahati Bazar Main Road", "Dimla, Nilphamari 5320"],
-  addressShort: "Chilahati Bazar, Dimla, Nilphamari",
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=Chilahati+Bazar+Dimla+Nilphamari",
   hours: [

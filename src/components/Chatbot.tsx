@@ -21,9 +21,6 @@ const SUGGESTIONS = categories
 function botReply(input: string): string {
   const t = input.toLowerCase();
 
-  if (/address|location|where/.test(t)) {
-    return `Our address: ${site.addressShort}. Message us via the WhatsApp link below to open it in Google Maps.`;
-  }
   if (/deliver|shipping|charge|fee|courier/.test(t)) {
     return "We offer home delivery around Chilahati Bazar. Call us for the delivery charge or to place an order 👉 " + site.phoneDisplay;
   }

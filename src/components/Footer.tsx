@@ -52,7 +52,6 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-paper/50">
           <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
-          <p>{site.addressShort}</p>
         </div>
       </div>
     </footer>
