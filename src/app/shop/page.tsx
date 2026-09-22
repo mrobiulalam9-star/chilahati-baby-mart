@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import ProductCard from "@/components/ProductCard";
-import Chatbot from "@/components/Chatbot";
 import { SortSelect } from "@/components/ShopFilters";
 import { categories, categoryBySlug, AGE_GROUPS, type AgeGroup } from "@/lib/products";
 import { getAllProducts } from "@/lib/all-products";
@@ -36,7 +35,6 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
-      <Chatbot />
       <div>
         <div className="flex justify-end mb-6">
           <Suspense fallback={null}>
