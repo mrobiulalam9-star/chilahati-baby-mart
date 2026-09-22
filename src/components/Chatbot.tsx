@@ -21,11 +21,14 @@ const SUGGESTIONS = categories
 function botReply(input: string): string {
   const t = input.toLowerCase();
 
+  if (/address|location|where/.test(t)) {
+    return "Our address: Shohidbag, mosque goli, 531/2 Shobnom Villa, Dhaka.";
+  }
   if (/deliver|shipping|charge|fee|courier/.test(t)) {
-    return "We offer home delivery around Chilahati Bazar. Call us for the delivery charge or to place an order 👉 " + site.phoneDisplay;
+    return "We offer home delivery in dhaka 80 tk and outside of dhaka 180 tk. Call us for the delivery charge or to place an order " + site.phoneDisplay;
   }
   if (/hour|time|open|close|when/.test(t)) {
-    return `Our shop hours:\n${site.hours.map((h) => `${h.days}: ${h.time}`).join("\n")}`;
+    return "Our Shop Hours: 24 Hours";
   }
   if (/order|buy|purchase/.test(t)) {
     return `To place an order, call or WhatsApp us:\n📞 ${site.phoneDisplay}\n\nYou can also send a message directly using the "Chat on WhatsApp" button below.`;
