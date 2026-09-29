@@ -1,8 +1,9 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import OrderButtons from "@/components/OrderButtons";
+import NewArrivals from "@/components/NewArrivals";
 import { categories } from "@/lib/products";
-import { getAllProducts } from "@/lib/all-products";
+import { getAllProducts, getNewArrivals } from "@/lib/all-products";
 
 const TESTIMONIALS = [
   {
@@ -28,9 +29,12 @@ const TESTIMONIALS = [
 export default function HomePage() {
   const allProducts = getAllProducts();
   const featured = allProducts.filter((p) => p.featured).slice(0, 8);
+  const newArrivals = getNewArrivals();
 
 return (
     <>
+      <NewArrivals items={newArrivals} />
+
       {/* All Products */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
         <div className="flex items-end justify-between mb-8">

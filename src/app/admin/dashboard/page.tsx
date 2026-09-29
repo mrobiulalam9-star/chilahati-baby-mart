@@ -22,6 +22,7 @@ type AdminProduct = {
   updatedAt: string;
   source: "static" | "admin";
   hidden?: boolean;
+  newArrival?: boolean;
 };
 
 const AGE_GROUP_OPTIONS = [
@@ -41,6 +42,7 @@ type FormData = {
   colors: string;
   description: string;
   featured: boolean;
+  newArrival: boolean;
   stock: string;
 };
 
@@ -54,6 +56,7 @@ const emptyForm: FormData = {
   colors: "",
   description: "",
   featured: false,
+  newArrival: false,
   stock: "50",
 };
 
@@ -71,6 +74,7 @@ export default function AdminDashboardPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [newArrivals, setNewArrivals] = useState<string[]>([]);
 
   const showMessage = (text: string, type: "success" | "error") => {
     setMessage({ text, type });
@@ -116,7 +120,19 @@ export default function AdminDashboardPage() {
         if (!cancelled) setLoading(false);
       }
     };
+    const loadNewArrivals = async () => {
+      try {
+        const res = await fetch("/api/admin/new-arrivals");
+        if (res.ok) {
+          const data = await res.json();
+          setNewArrivals(data.slugs || []);
+        }
+      } catch {
+        /* non-critical */
+      }
+    };
     load();
+    loadNewArrivals();
     return () => { cancelled = true; };
   }, [router]);
 
@@ -171,6 +187,7 @@ export default function AdminDashboardPage() {
       colors: product.colors.join(", "),
       description: product.description,
       featured: product.featured,
+      newArrival: !!product.newArrival,
       stock: String(product.stock),
     });
     setEditingId(product.id);
@@ -184,6 +201,9 @@ export default function AdminDashboardPage() {
     setSubmitting(true);
 
     try {
+      const editingSlug = editingId ? products.find((p) => p.id === editingId)?.slug : undefined;
+      const wasNewArrival = editingSlug ? newArrivals.includes(editingSlug) : false;
+
       const payload = {
         name: form.name,
         category: form.category,
@@ -195,6 +215,7 @@ export default function AdminDashboardPage() {
         images: uploadedImages,
         description: form.description,
         featured: form.featured,
+        newArrival: form.newArrival,
         stock: Number(form.stock),
       };
 
@@ -214,6 +235,23 @@ export default function AdminDashboardPage() {
       }
 
       if (res.ok) {
+        const saved = await res.json().catch(() => null);
+        const savedSlug = saved?.product?.slug;
+        if (savedSlug) {
+          const wantsOn = Boolean(form.newArrival);
+          if (wantsOn !== wasNewArrival) {
+            await fetch("/api/admin/new-arrivals", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ slug: savedSlug, on: wantsOn }),
+            });
+          }
+        }
+        const res2 = await fetch("/api/admin/new-arrivals");
+        if (res2.ok) {
+          const data2 = await res2.json();
+          setNewArrivals(data2.slugs || []);
+        }
         showMessage(editingId ? "Product updated!" : "Product created!", "success");
         resetForm();
         fetchProducts();
@@ -261,9 +299,59 @@ export default function AdminDashboardPage() {
     }));
   };
 
+  const applyNewArrivals = (slugs: string[]) => {
+    setNewArrivals(slugs);
+    const set = new Set(slugs);
+    setProducts((prev) => prev.map((p) => ({ ...p, newArrival: set.has(p.slug) })));
+  };
+
+  const toggleNewArrival = async (slug: string, on: boolean) => {
+    if (!slug) {
+      showMessage("This product cannot be added to New Arrival", "error");
+      return;
+    }
+    try {
+      const res = await fetch("/api/admin/new-arrivals", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug, on }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        applyNewArrivals(data.slugs || []);
+        showMessage(on ? "Added to New Arrival" : "Removed from New Arrival", "success");
+      } else {
+        showMessage("Failed to update New Arrival", "error");
+      }
+    } catch {
+      showMessage("Network error", "error");
+    }
+  };
+
+  const moveNewArrival = async (slug: string, move: "up" | "down") => {
+    try {
+      const res = await fetch("/api/admin/new-arrivals", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug, move }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        applyNewArrivals(data.slugs || []);
+      }
+    } catch {
+      showMessage("Network error", "error");
+    }
+  };
+
   const filteredProducts = products.filter((p) => {
     const matchesSearch = !searchTerm || p.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !filterCategory || p.category === filterCategory;
+    const matchesCategory =
+      filterCategory === ""
+        ? true
+        : filterCategory === "__new_arrival__"
+          ? !!p.newArrival
+          : p.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -340,8 +428,8 @@ export default function AdminDashboardPage() {
             <p className="font-display font-bold text-3xl mt-2">{new Set(products.map((p) => p.category)).size}</p>
           </div>
           <div className="bg-white rounded-2xl border border-line p-5">
-            <p className="text-xs uppercase tracking-widest text-muted">Low Stock</p>
-            <p className="font-display font-bold text-3xl mt-2">{products.filter((p) => p.stock < 10).length}</p>
+            <p className="text-xs uppercase tracking-widest text-muted">New Arrivals</p>
+            <p className="font-display font-bold text-3xl mt-2">{newArrivals.length}</p>
           </div>
         </div>
 
@@ -401,17 +489,29 @@ export default function AdminDashboardPage() {
                 <div>
                   <label className="block text-xs uppercase tracking-widest text-muted mb-2">Category *</label>
                   <select
-                    value={form.category}
-                    onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+                    value={form.newArrival ? "__new_arrival__" : form.category}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (v === "__new_arrival__") {
+                        setForm((f) => ({ ...f, newArrival: true }));
+                      } else {
+                        setForm((f) => ({ ...f, category: v }));
+                      }
+                    }}
                     className="w-full px-4 py-3 rounded-xl border border-line focus:border-blush focus:outline-none transition-colors bg-white"
                     required
                   >
+                    <option value="__new_arrival__">New Arrival</option>
                     {categories.map((c) => (
                       <option key={c.slug} value={c.slug}>
                         {c.name}
                       </option>
                     ))}
                   </select>
+                  <p className="text-xs text-muted mt-1">
+                    Selecting <span className="font-medium text-blush">New Arrival</span> switches on the New Arrival
+                    toggle below — to also set a real category, pick one from the list (New Arrival stays on).
+                  </p>
                 </div>
 
                 {/* Price */}
@@ -519,6 +619,24 @@ export default function AdminDashboardPage() {
                 <span className="text-sm font-medium">Featured Product</span>
               </div>
 
+              {/* New Arrival */}
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setForm((f) => ({ ...f, newArrival: !f.newArrival }))}
+                  className={`relative w-12 h-6 rounded-full transition-colors ${
+                    form.newArrival ? "bg-blush" : "bg-gray-300"
+                  }`}
+                >
+                  <span
+                    className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${
+                      form.newArrival ? "translate-x-6" : ""
+                    }`}
+                  />
+                </button>
+                <span className="text-sm font-medium">New Arrival (show in homepage strip)</span>
+              </div>
+
               {/* Image Upload */}
               <div>
                 <label className="block text-xs uppercase tracking-widest text-muted mb-3">Product Images</label>
@@ -603,12 +721,12 @@ export default function AdminDashboardPage() {
           <div className="p-6 border-b border-line">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <h2 className="font-display font-bold text-xl">Products ({filteredProducts.length})</h2>
-              <div className="flex items-center gap-3 flex-1 w-full sm:w-auto">
+              <div className="flex items-center gap-3 flex-1 w-full sm:w-auto flex-wrap">
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="flex-1 px-4 py-2.5 rounded-xl border border-line focus:border-blush focus:outline-none transition-colors text-sm"
+                  className="flex-1 min-w-[160px] px-4 py-2.5 rounded-xl border border-line focus:border-blush focus:outline-none transition-colors text-sm"
                   placeholder="Search products..."
                 />
                 <select
@@ -617,6 +735,7 @@ export default function AdminDashboardPage() {
                   className="px-4 py-2.5 rounded-xl border border-line focus:border-blush focus:outline-none transition-colors text-sm bg-white"
                 >
                   <option value="">All Categories</option>
+                  <option value="__new_arrival__">New Arrival</option>
                   {categories.map((c) => (
                     <option key={c.slug} value={c.slug}>
                       {c.name}
@@ -642,6 +761,7 @@ export default function AdminDashboardPage() {
                     <th className="text-left text-xs uppercase tracking-widest text-muted px-6 py-4 font-medium">Price</th>
                     <th className="text-left text-xs uppercase tracking-widest text-muted px-6 py-4 font-medium hidden lg:table-cell">Stock</th>
                     <th className="text-left text-xs uppercase tracking-widest text-muted px-6 py-4 font-medium hidden lg:table-cell">Featured</th>
+                    <th className="text-left text-xs uppercase tracking-widest text-muted px-6 py-4 font-medium hidden lg:table-cell">New Arrival</th>
                     <th className="text-left text-xs uppercase tracking-widest text-muted px-6 py-4 font-medium">Edit</th>
                     <th className="text-right text-xs uppercase tracking-widest text-muted px-6 py-4 font-medium">Actions</th>
                   </tr>
@@ -694,6 +814,48 @@ export default function AdminDashboardPage() {
                         ) : (
                           <span className="text-xs text-muted">—</span>
                         )}
+                      </td>
+                      <td className="px-6 py-4 hidden lg:table-cell">
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => toggleNewArrival(product.slug, !product.newArrival)}
+                            className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full transition-colors ${
+                              product.newArrival
+                                ? "bg-blush text-white hover:bg-blush-deep"
+                                : "bg-cream text-muted hover:text-blush"
+                            }`}
+                            title={product.newArrival ? "Remove from homepage New Arrival strip" : "Add to homepage New Arrival strip"}
+                          >
+                            {product.newArrival ? "★ New" : "+ Add"}
+                          </button>
+                          {product.newArrival && (
+                            <span className="flex flex-col">
+                              <button
+                                type="button"
+                                aria-label="Move up in New Arrival"
+                                onClick={() => moveNewArrival(product.slug, "up")}
+                                disabled={newArrivals.indexOf(product.slug) <= 0}
+                                className="text-muted hover:text-blush transition-colors disabled:opacity-30 disabled:pointer-events-none leading-none"
+                              >
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M18 15l-6-6-6 6" />
+                                </svg>
+                              </button>
+                              <button
+                                type="button"
+                                aria-label="Move down in New Arrival"
+                                onClick={() => moveNewArrival(product.slug, "down")}
+                                disabled={newArrivals.indexOf(product.slug) === -1 || newArrivals.indexOf(product.slug) === newArrivals.length - 1}
+                                className="text-muted hover:text-blush transition-colors disabled:opacity-30 disabled:pointer-events-none leading-none"
+                              >
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M6 9l6 6 6-6" />
+                                </svg>
+                              </button>
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-6 py-4">
                         {!product.hidden ? (

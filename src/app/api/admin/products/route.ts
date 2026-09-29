@@ -9,6 +9,7 @@ import {
 import { products as staticProducts } from "@/lib/products";
 import { getHiddenSlugs, hideProduct, unhideProduct } from "@/lib/admin-hidden";
 import { getOverrides } from "@/lib/admin-overrides";
+import { getNewArrivalSlugs } from "@/lib/admin-new-arrivals";
 
 export type DashboardProduct = {
   id: string;
@@ -26,11 +27,12 @@ export type DashboardProduct = {
   stock: number;
   source: "static" | "admin";
   hidden?: boolean;
+  newArrival?: boolean;
   createdAt?: string;
   updatedAt?: string;
 };
 
-function staticToDashboard(p: (typeof staticProducts)[0], hidden: boolean): DashboardProduct {
+function staticToDashboard(p: (typeof staticProducts)[0], hidden: boolean, newArrivals: Set<string>): DashboardProduct {
   const o = getOverrides()[p.slug];
   return {
     id: `static_${p.slug}`,
@@ -48,13 +50,15 @@ function staticToDashboard(p: (typeof staticProducts)[0], hidden: boolean): Dash
     stock: 999,
     source: "static",
     hidden,
+    newArrival: newArrivals.has(p.slug),
   };
 }
 
-function adminToDashboard(p: AdminProduct): DashboardProduct {
+function adminToDashboard(p: AdminProduct, newArrivals: Set<string>): DashboardProduct {
   return {
     ...p,
     source: "admin",
+    newArrival: newArrivals.has(p.slug),
   };
 }
 
@@ -63,13 +67,14 @@ export async function GET(req: NextRequest) {
   if (auth instanceof NextResponse) return auth;
 
   const hidden = new Set(getHiddenSlugs());
+  const newArrivals = new Set(getNewArrivalSlugs());
   const adminProducts = getAllAdminProducts()
     .filter((p) => !hidden.has(p.slug))
-    .map(adminToDashboard);
+    .map((p) => adminToDashboard(p, newArrivals));
   const adminSlugs = new Set(adminProducts.map((p) => p.slug));
   const allStatic = staticProducts
     .filter((p) => !adminSlugs.has(p.slug))
-    .map((p) => staticToDashboard(p, hidden.has(p.slug)));
+    .map((p) => staticToDashboard(p, hidden.has(p.slug), newArrivals));
 
   const all = [...allStatic, ...adminProducts];
   return NextResponse.json({ products: all });

@@ -3,6 +3,7 @@ import path from "path";
 import { Product, products as staticProducts } from "./products";
 import { getHiddenSlugs } from "./admin-hidden";
 import { getOverrides } from "./admin-overrides";
+import { getNewArrivalSlugs } from "./admin-new-arrivals";
 
 export type AdminProduct = {
   id: string;
@@ -85,4 +86,42 @@ export function getRelatedProducts(product: Product, count = 4): Product[] {
   return getAllProducts()
     .filter((p) => p.category === product.category && p.slug !== product.slug)
     .slice(0, count);
+}
+
+const NEW_ARRIVAL_SLUGS = [
+  "ladies-item-47",
+  "ladies-item-46",
+  "ladies-item-45",
+  "ladies-item-44",
+  "ladies-item-43",
+  "baby-item-26",
+  "baby-item-25",
+  "baby-item-24",
+  "blossom-party-frock",
+  "cloud-cotton-romper",
+  "first-steps-booties",
+  "pom-pom-beanie",
+  "starry-pajama-set",
+  "sunny-tee-shorts-set",
+];
+
+export function getNewArrivals(count = 20): Product[] {
+  const hidden = new Set(getHiddenSlugs());
+  const bySlug = new Map<string, Product>();
+  for (const p of staticProducts) bySlug.set(p.slug, applyOverrides(p));
+  for (const a of readAdminProducts()) bySlug.set(a.slug, adminToProduct(a));
+
+  const order = getNewArrivalSlugs();
+  const fallback = order.length === 0 ? NEW_ARRIVAL_SLUGS : order;
+
+  const out: Product[] = [];
+  const seen = new Set<string>();
+  for (const slug of fallback) {
+    const product = bySlug.get(slug);
+    if (!product || !product.slug || hidden.has(product.slug) || seen.has(product.slug)) continue;
+    seen.add(product.slug);
+    out.push(product);
+    if (out.length >= count) break;
+  }
+  return out;
 }
