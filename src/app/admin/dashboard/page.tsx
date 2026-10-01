@@ -271,7 +271,7 @@ export default function AdminDashboardPage() {
     const msg = isHidden
       ? `Restore "${name}" back to the store?`
       : isStatic
-        ? `Remove "${name}" from the store? It can be restored later via admin.`
+        ? `Delete "${name}" permanently?\n\nThis removes it from the store for good. This cannot be undone.`
         : `Delete "${name}" permanently?\n\nThis will also delete these image file(s) from disk:\n${images.length > 0 ? images.map((img) => `• ${img}`).join("\n") : "• (no images)"}\n\nThis cannot be undone.`;
     if (!confirm(msg)) return;
 
@@ -281,7 +281,7 @@ export default function AdminDashboardPage() {
         const data = await res.json().catch(() => null);
         const removedCount = data?.filesRemoved?.length ?? 0;
         showMessage(
-          isHidden ? "Product restored to store" : isStatic ? "Product removed from store" : removedCount > 0 ? `Product deleted (${removedCount} image file(s) removed from disk)` : "Product deleted",
+          isHidden ? "Product restored to store" : isStatic ? "Product deleted" : removedCount > 0 ? `Product deleted (${removedCount} image file(s) removed from disk)` : "Product deleted",
           "success"
         );
         fetchProducts();
@@ -904,7 +904,7 @@ export default function AdminDashboardPage() {
                                 ? "hover:bg-green-50 text-green-600"
                                 : "hover:bg-red-50 text-red-600"
                             }`}
-                            title={product.hidden ? "Restore to store" : product.source === "static" ? "Remove from store" : "Delete"}
+                            title={product.hidden ? "Restore to store" : "Delete"}
                           >
                             {product.hidden ? (
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

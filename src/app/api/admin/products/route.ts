@@ -75,8 +75,8 @@ export async function GET(req: NextRequest) {
     .map((p) => adminToDashboard(p, newArrivals));
   const adminSlugs = new Set(adminProducts.map((p) => p.slug));
   const allStatic = staticProducts
-    .filter((p) => !adminSlugs.has(p.slug))
-    .map((p) => staticToDashboard(p, hidden.has(p.slug), newArrivals));
+    .filter((p) => !adminSlugs.has(p.slug) && !hidden.has(p.slug))
+    .map((p) => staticToDashboard(p, false, newArrivals));
 
   const all = [...allStatic, ...adminProducts];
   return NextResponse.json({ products: all });

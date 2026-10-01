@@ -7,8 +7,8 @@ import {
   deleteImageFiles,
   slugify,
 } from "@/lib/admin-products";
-import { hideProduct, unhideProduct } from "@/lib/admin-hidden";
-import { getOverrides, setStaticOverride } from "@/lib/admin-overrides";
+import { hideProduct } from "@/lib/admin-hidden";
+import { deleteStaticOverride, getOverrides, setStaticOverride } from "@/lib/admin-overrides";
 import { products as staticProducts } from "@/lib/products";
 
 type Params = Promise<{ id: string }>;
@@ -120,14 +120,9 @@ export async function DELETE(req: NextRequest, { params }: { params: Params }) {
 
   if (id.startsWith("static_")) {
     const slug = id.replace("static_", "");
-    const { getHiddenSlugs } = await import("@/lib/admin-hidden");
-    const alreadyHidden = getHiddenSlugs().includes(slug);
-    if (alreadyHidden) {
-      unhideProduct(slug);
-      return NextResponse.json({ success: true, action: "unhidden", slug });
-    }
     hideProduct(slug);
-    return NextResponse.json({ success: true, action: "hidden", slug });
+    deleteStaticOverride(slug);
+    return NextResponse.json({ success: true, action: "deleted", slug });
   }
 
   const deleted = deleteAdminProduct(id);

@@ -48,3 +48,12 @@ export function setStaticOverride(
   fs.writeFileSync(OVERRIDES_FILE, JSON.stringify(overrides, null, 2), "utf-8");
   return next;
 }
+
+export function deleteStaticOverride(slug: string): boolean {
+  const overrides = getOverrides();
+  if (!(slug in overrides)) return false;
+  delete overrides[slug];
+  ensureDataDir();
+  fs.writeFileSync(OVERRIDES_FILE, JSON.stringify(overrides, null, 2), "utf-8");
+  return true;
+}
