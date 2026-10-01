@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import ProductCard from "@/components/ProductCard";
 import { SortSelect } from "@/components/ShopFilters";
-import { categories, categoryBySlug, AGE_GROUPS, type AgeGroup } from "@/lib/products";
+import { categories, categoryBySlug, AGE_GROUPS, type AgeGroup, type Product } from "@/lib/products";
 import { getAllProducts } from "@/lib/all-products";
+import { hasPrice } from "@/lib/site";
 
 export const metadata = { title: "Shop" };
 
@@ -26,8 +27,16 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
     const ageGroup = age as AgeGroup;
     list = list.filter((p) => p.ages.includes(ageGroup));
   }
-  if (sort === "price-asc") list.sort((a, b) => a.price - b.price);
-  else if (sort === "price-desc") list.sort((a, b) => b.price - a.price);
+  const byPriceAsc = (a: Product, b: Product) => {
+    const av = hasPrice(a.price) ? Number(a.price) : null;
+    const bv = hasPrice(b.price) ? Number(b.price) : null;
+    if (av === null && bv === null) return 0;
+    if (av === null) return 1;
+    if (bv === null) return -1;
+    return av - bv;
+  };
+  if (sort === "price-asc") list.sort(byPriceAsc);
+  else if (sort === "price-desc") list.sort((a, b) => byPriceAsc(b, a));
   else if (sort === "name") list.sort((a, b) => a.name.localeCompare(b.name));
   else {
     list.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));

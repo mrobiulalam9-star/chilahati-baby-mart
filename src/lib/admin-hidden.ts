@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { readJsonFile } from "./data-json";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const HIDDEN_FILE = path.join(DATA_DIR, "hidden-products.json");
@@ -12,12 +13,8 @@ function ensureDataDir() {
 
 function readHidden(): string[] {
   ensureDataDir();
-  if (!fs.existsSync(HIDDEN_FILE)) return [];
-  try {
-    return JSON.parse(fs.readFileSync(HIDDEN_FILE, "utf-8"));
-  } catch {
-    return [];
-  }
+  const data = readJsonFile<unknown>(HIDDEN_FILE, []);
+  return Array.isArray(data) ? data.filter((s): s is string => typeof s === "string") : [];
 }
 
 function writeHidden(slugs: string[]) {

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import { categories, type Product } from "@/lib/products";
-import { formatPrice } from "@/lib/site";
+import { formatPrice, hasPrice, handleImageError } from "@/lib/site";
 
 function subscribeReducedMotion(cb: () => void) {
   const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -42,6 +42,7 @@ export default function NewArrivals({ items }: { items: Product[] }) {
             src={main}
             alt={p.name}
             loading="lazy"
+            onError={handleImageError}
             className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-0"
           />
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -50,6 +51,7 @@ export default function NewArrivals({ items }: { items: Product[] }) {
             alt=""
             aria-hidden
             loading="lazy"
+            onError={handleImageError}
             className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           />
           <span className="absolute left-3 top-3 rounded-full bg-blush px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white shadow-sm">
@@ -61,10 +63,12 @@ export default function NewArrivals({ items }: { items: Product[] }) {
           <h3 className="font-display mt-1 text-lg font-semibold leading-snug transition-colors group-hover:text-blush">
             {p.name}
           </h3>
-          <p className="mt-1 text-base">
-            <span className="font-semibold">{formatPrice(p.price)}</span>
-            {p.oldPrice && <s className="ml-2 text-sm text-muted">{formatPrice(p.oldPrice)}</s>}
-          </p>
+          {hasPrice(p.price) && (
+            <p className="mt-1 text-base">
+              <span className="font-semibold">{formatPrice(p.price)}</span>
+              {p.oldPrice && <s className="ml-2 text-sm text-muted">{formatPrice(p.oldPrice)}</s>}
+            </p>
+          )}
         </div>
       </Link>
     );

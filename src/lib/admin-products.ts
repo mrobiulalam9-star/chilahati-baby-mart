@@ -1,12 +1,13 @@
 import fs from "fs";
 import path from "path";
+import { readJsonFile } from "./data-json";
 
 export type AdminProduct = {
   id: string;
   slug: string;
   name: string;
   category: string;
-  price: number;
+  price: number | null;
   oldPrice?: number;
   ages: string[];
   sizes: string[];
@@ -30,15 +31,8 @@ function ensureDataDir() {
 
 function readProducts(): AdminProduct[] {
   ensureDataDir();
-  if (!fs.existsSync(PRODUCTS_FILE)) {
-    return [];
-  }
-  try {
-    const data = fs.readFileSync(PRODUCTS_FILE, "utf-8");
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
+  const data = readJsonFile<unknown>(PRODUCTS_FILE, []);
+  return Array.isArray(data) ? (data as AdminProduct[]) : [];
 }
 
 function writeProducts(products: AdminProduct[]) {

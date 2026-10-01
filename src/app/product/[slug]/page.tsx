@@ -3,9 +3,10 @@ import { notFound } from "next/navigation";
 import ProductGallery from "@/components/ProductGallery";
 import ProductCard from "@/components/ProductCard";
 import OrderButtons from "@/components/OrderButtons";
+import ProductOrderPanel from "@/components/ProductOrderPanel";
 import { categories, categoryBySlug, AGE_GROUPS } from "@/lib/products";
 import { getAllProducts, getProductBySlug, getRelatedProducts } from "@/lib/all-products";
-import { formatPrice } from "@/lib/site";
+import { formatPrice, hasPrice } from "@/lib/site";
 
 type Params = Promise<{ slug: string }>;
 
@@ -49,17 +50,19 @@ export default async function ProductPage({ params }: { params: Params }) {
           <p className="text-xs uppercase tracking-[0.3em] text-blush-deep mb-3">{category?.name}</p>
           <h1 className="font-display font-bold text-3xl sm:text-4xl leading-tight">{product.name}</h1>
 
-          <p className="mt-4 flex items-baseline gap-3">
-            <span className="text-2xl font-bold">{formatPrice(product.price)}</span>
-            {product.oldPrice && (
-              <>
-                <s className="text-muted text-base">{formatPrice(product.oldPrice)}</s>
-                <span className="rounded-full bg-blush/10 text-blush-deep text-xs font-semibold px-2.5 py-1">
-                  Save {formatPrice(product.oldPrice - product.price)}
-                </span>
-              </>
-            )}
-          </p>
+          {hasPrice(product.price) && (
+            <p className="mt-4 flex items-baseline gap-3">
+              <span className="text-2xl font-bold">{formatPrice(product.price)}</span>
+              {product.oldPrice && (
+                <>
+                  <s className="text-muted text-base">{formatPrice(product.oldPrice)}</s>
+                  <span className="rounded-full bg-blush/10 text-blush-deep text-xs font-semibold px-2.5 py-1">
+                    Save {formatPrice(product.oldPrice - (product.price as number))}
+                  </span>
+                </>
+              )}
+            </p>
+          )}
           <p className="text-xs text-muted mt-1">Price in Taka · Cash on delivery available</p>
 
           <div className="mt-7 space-y-4 text-sm">
@@ -83,10 +86,27 @@ export default async function ProductPage({ params }: { params: Params }) {
           <p className="mt-6 text-muted leading-relaxed">{product.description}</p>
 
           <div className="mt-8">
-            <OrderButtons productName={`${product.name} — ${formatPrice(product.price)}`} />
+            <p className="mb-3 text-xs uppercase tracking-[0.25em] text-muted">Order now</p>
+            <ProductOrderPanel
+              slug={product.slug}
+              name={product.name}
+              price={product.price}
+              image={product.images[0]}
+              sizes={product.sizes}
+              colors={product.colors}
+            />
+          </div>
+          <div className="mt-4">
+            <OrderButtons
+              productName={
+                hasPrice(product.price)
+                  ? `${product.name} — ${formatPrice(product.price)}`
+                  : product.name
+              }
+            />
           </div>
           <p className="text-xs text-muted mt-4">
-            Stock is limited — please confirm availability by phone before visiting.
+            Add several products to one order — no advance payment, cash on delivery.
           </p>
 
           <div className="mt-9 divide-y divide-line border-t border-line text-sm">

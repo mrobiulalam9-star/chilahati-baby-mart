@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { readJsonFile } from "./data-json";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const NEW_ARRIVALS_FILE = path.join(DATA_DIR, "new-arrivals.json");
@@ -12,13 +13,8 @@ function ensureDataDir() {
 
 function readNewArrivals(): string[] {
   ensureDataDir();
-  if (!fs.existsSync(NEW_ARRIVALS_FILE)) return [];
-  try {
-    const data = JSON.parse(fs.readFileSync(NEW_ARRIVALS_FILE, "utf-8"));
-    return Array.isArray(data) ? data.filter((s) => typeof s === "string") : [];
-  } catch {
-    return [];
-  }
+  const data = readJsonFile<unknown>(NEW_ARRIVALS_FILE, []);
+  return Array.isArray(data) ? data.filter((s): s is string => typeof s === "string") : [];
 }
 
 function writeNewArrivals(slugs: string[]) {

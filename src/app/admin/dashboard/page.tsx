@@ -3,13 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { categories } from "@/lib/products";
+import { formatPrice, hasPrice } from "@/lib/site";
 
 type AdminProduct = {
   id: string;
   slug: string;
   name: string;
   category: string;
-  price: number;
+  price: number | null;
   oldPrice?: number;
   ages: string[];
   sizes: string[];
@@ -180,7 +181,7 @@ export default function AdminDashboardPage() {
     setForm({
       name: product.name,
       category: product.category,
-      price: String(product.price),
+      price: product.price === null || product.price === undefined ? "" : String(product.price),
       oldPrice: product.oldPrice ? String(product.oldPrice) : "",
       ages: [...product.ages],
       sizes: product.sizes.join(", "),
@@ -205,9 +206,9 @@ export default function AdminDashboardPage() {
       const wasNewArrival = editingSlug ? newArrivals.includes(editingSlug) : false;
 
       const payload = {
-        name: form.name,
+        name: form.name.trim(),
         category: form.category,
-        price: Number(form.price),
+        price: form.price.trim() === "" ? null : Number(form.price),
         oldPrice: form.oldPrice ? Number(form.oldPrice) : undefined,
         ages: form.ages,
         sizes: form.sizes.split(",").map((s) => s.trim()).filter(Boolean),
@@ -380,6 +381,16 @@ export default function AdminDashboardPage() {
           </div>
           <div className="flex items-center gap-3">
             <a
+              href="/admin/orders"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border border-line rounded-xl hover:border-blush transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                <path d="M3 6h18M16 10a4 4 0 01-8 0" />
+              </svg>
+              Orders
+            </a>
+            <a
               href="/shop"
               target="_blank"
               className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border border-line rounded-xl hover:border-blush transition-colors"
@@ -474,14 +485,13 @@ export default function AdminDashboardPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Name */}
                 <div>
-                  <label className="block text-xs uppercase tracking-widest text-muted mb-2">Product Name *</label>
+                  <label className="block text-xs uppercase tracking-widest text-muted mb-2">Product Name</label>
                   <input
                     type="text"
                     value={form.name}
                     onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                     className="w-full px-4 py-3 rounded-xl border border-line focus:border-blush focus:outline-none transition-colors"
                     placeholder="e.g. Cotton Romper"
-                    required
                   />
                 </div>
 
@@ -516,7 +526,7 @@ export default function AdminDashboardPage() {
 
                 {/* Price */}
                 <div>
-                  <label className="block text-xs uppercase tracking-widest text-muted mb-2">Price (BDT) *</label>
+                  <label className="block text-xs uppercase tracking-widest text-muted mb-2">Price (BDT)</label>
                   <input
                     type="number"
                     value={form.price}
@@ -524,7 +534,6 @@ export default function AdminDashboardPage() {
                     className="w-full px-4 py-3 rounded-xl border border-line focus:border-blush focus:outline-none transition-colors"
                     placeholder="e.g. 450"
                     min="0"
-                    required
                   />
                 </div>
 
@@ -796,7 +805,7 @@ export default function AdminDashboardPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="font-semibold text-sm">৳{product.price}</span>
+                        <span className="font-semibold text-sm">{hasPrice(product.price) ? formatPrice(product.price) : ""}</span>
                         {product.oldPrice && (
                           <s className="text-xs text-muted ml-2">৳{product.oldPrice}</s>
                         )}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISTCL Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <img class="brand-logo" src="logo.jpg" alt="ISTCL logo"
+           onerror="this.style.display='none';document.getElementById('brandFallback').style.display='inline-flex';" />
+      <span id="brandFallback" class="brand-mark" style="display:none">ISTCL</span>
+      <div class="brand-text">
+        <h1>ISTCL</h1>
+        <p class="brand-sub">ICB Securities Trading Company Limited</p>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span id="marketStatus" class="status-pill">Loading…</span>
+      <span id="lastUpdate" class="last-update"></span>
+      <span id="countdown" class="countdown"></span>
+      <button id="refreshBtn" class="refresh-btn" type="button" title="Refresh now">Refresh</button>
+    </div>
+  </header>
+
+  <div id="errorBanner" class="error-banner" hidden></div>
+
+  <div class="ticker-wrap">
+    <div class="ticker" id="ticker"></div>
+  </div>
+
+  <nav class="site-nav">
+    <a href="/" class="nav-btn">Home</a>
+    <a href="/market.html" class="nav-btn">Market</a>
+    <a href="#" class="nav-btn">About</a>
+  </nav>
+
+  <main>
+    <section class="index-cards" id="indexCards"></section>
+
+    <section class="stats-strip" id="marketStats"></section>
+
+    <section class="table-panel">
+      <div class="controls">
+        <input id="searchBox" type="search" placeholder="Search trading code…" autocomplete="off" />
+        <select id="groupSelect">
+          <option value="">All categories</option>
+          <option value="A">Category A</option>
+          <option value="B">Category B</option>
+          <option value="G">Category G</option>
+          <option value="N">Category N</option>
+          <option value="Z">Category Z</option>
+        </select>
+        <span id="rowCount" class="row-count"></span>
+      </div>
+      <div class="table-scroll">
+        <table id="secTable">
+          <thead>
+            <tr>
+              <th data-key="code">Trading Code</th>
+              <th data-key="category">Category</th>
+              <th data-key="freeFloatShares">Free Float Shares</th>
+              <th data-key="foreignPct">Foreign Share %</th>
+              <th data-key="week52Low">52W Low</th>
+              <th data-key="week52High">52W High</th>
+              <th data-key="ltp">LTP</th>
+            </tr>
+          </thead>
+          <tbody id="secTableBody">
+            <tr><td colspan="7" class="empty-row">Loading securities…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

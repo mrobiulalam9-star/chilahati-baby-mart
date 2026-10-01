@@ -46,8 +46,10 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
         return NextResponse.json({ error: "Product not found" }, { status: 404 });
       }
       const updates: Parameters<typeof setStaticOverride>[1] = {};
-      if (body.name !== undefined) updates.name = body.name;
-      if (body.price !== undefined) updates.price = Number(body.price);
+      if (body.name !== undefined) updates.name = String(body.name);
+      if (body.price !== undefined) {
+        updates.price = body.price === null || body.price === "" ? null : Number(body.price);
+      }
       if (body.oldPrice !== undefined) updates.oldPrice = body.oldPrice ? Number(body.oldPrice) : undefined;
       if (body.images !== undefined) updates.images = body.images;
       if (body.ages !== undefined) updates.ages = body.ages;
@@ -64,7 +66,7 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
           slug,
           name: o.name ?? base.name,
           category: base.category,
-          price: o.price ?? base.price,
+          price: o.price === undefined ? base.price : o.price,
           oldPrice: o.oldPrice ?? base.oldPrice,
           ages: o.ages ?? base.ages,
           sizes: o.sizes ?? base.sizes,
@@ -82,11 +84,15 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
     const updates: Record<string, unknown> = {};
 
     if (body.name !== undefined) {
-      updates.name = body.name;
-      updates.slug = slugify(body.name);
+      const name = String(body.name);
+      updates.name = name;
+      const nextSlug = slugify(name);
+      if (nextSlug) updates.slug = nextSlug;
     }
     if (body.category !== undefined) updates.category = body.category;
-    if (body.price !== undefined) updates.price = Number(body.price);
+    if (body.price !== undefined) {
+      updates.price = body.price === null || body.price === "" ? null : Number(body.price);
+    }
     if (body.oldPrice !== undefined) updates.oldPrice = body.oldPrice ? Number(body.oldPrice) : undefined;
     if (body.ages !== undefined) updates.ages = body.ages;
     if (body.sizes !== undefined) updates.sizes = body.sizes;

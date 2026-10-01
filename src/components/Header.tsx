@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { site } from "@/lib/site";
+import { site, handleImageError } from "@/lib/site";
+import { useCart } from "@/components/CartContext";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -17,6 +18,7 @@ const NAV = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { openCart, totalQty } = useCart();
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -47,6 +49,7 @@ export default function Header() {
                   alt="Chilahati Ladies & Baby Mart logo"
                   width={40}
                   height={40}
+                  onError={handleImageError}
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <span className="font-display font-bold text-lg leading-none tracking-tight">
@@ -70,14 +73,30 @@ export default function Header() {
             </nav>
 
             <div className="flex items-center gap-3">
-              <a
-                href={site.phoneHref}
+              <button
+                type="button"
+                onClick={openCart}
                 className="hidden sm:inline-flex items-center gap-2 rounded-full bg-blush hover:bg-blush-deep text-white text-sm font-semibold px-4 py-2 transition-colors"
               >
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.96.36 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.45c.9.34 1.84.57 2.8.7a2 2 0 0 1 1.7 2z" />
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 0 002-2V6l-3-4z" />
+                  <path d="M3 6h18M16 10a4 4 0 01-8 0" />
                 </svg>
                 Order Now
+                {totalQty > 0 && (
+                  <span className="min-w-[1.25rem] rounded-full bg-white text-blush-deep text-xs font-bold px-1.5 py-0.5 text-center tabular-nums">
+                    {totalQty}
+                  </span>
+                )}
+              </button>
+              <a
+                href={site.phoneHref}
+                aria-label={`Call ${site.phoneDisplay}`}
+                className="sm:hidden inline-flex items-center rounded-full border-2 border-blush/30 text-blush-deep p-2.5 transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.96.36 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.45c.9.34 1.84.57 2.8.7a2 2 0 0 1 1.7 2z" />
+                </svg>
               </a>
               <Link
                 href="/admin"
@@ -95,6 +114,27 @@ export default function Header() {
 
         {menuOpen && (
           <nav className="md:hidden border-t border-line bg-paper">
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                openCart();
+              }}
+              className="flex w-full items-center justify-between gap-2 bg-blush/5 px-6 py-3.5 text-sm font-semibold text-blush-deep"
+            >
+              <span className="flex items-center gap-2">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                  <path d="M3 6h18M16 10a4 4 0 01-8 0" />
+                </svg>
+                Order Now
+              </span>
+              {totalQty > 0 && (
+                <span className="rounded-full bg-blush px-2 py-0.5 text-xs font-bold text-white tabular-nums">
+                  {totalQty}
+                </span>
+              )}
+            </button>
             {NAV.map((n) => (
               <Link
                 key={n.label}

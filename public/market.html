@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Market</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <img class="brand-logo" src="logo.jpg" alt="ISTCL logo"
+           onerror="this.style.display='none';document.getElementById('brandFallback').style.display='inline-flex';" />
+      <span id="brandFallback" class="brand-mark" style="display:none">ISTCL</span>
+      <div class="brand-text">
+        <h1>ISTCL</h1>
+        <p class="brand-sub">ICB Securities Trading Company Limited</p>
+      </div>
+    </div>
+    <div class="header-meta">
+      <a href="/" class="nav-btn">Home</a>
+    </div>
+  </header>
+
+  <nav class="site-nav">
+    <a href="/" class="nav-btn">Home</a>
+    <a href="/market.html" class="nav-btn">Market</a>
+    <a href="#" class="nav-btn">About</a>
+  </nav>
+
+  <main class="blank-main">
+    <section class="report-panel">
+      <div class="report-card">
+        <h2>Daily Turnover Template</h2>
+        <p class="report-desc">Upload the daily report Excel or PDF. Every field below is filled in TK crore and follows the calculation logic of the master report.</p>
+        <div class="report-actions">
+          <label class="report-btn" for="templateFile">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Excel / PDF
+          </label>
+          <input id="templateFile" type="file" accept=".xlsx,.xls,.csv,.pdf" hidden />
+          <button type="button" id="templatePdfBtn" class="report-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+            PDF Preview
+          </button>
+          <button type="button" id="templatePrintBtn" class="report-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print
+          </button>
+          <span id="templateStatus" class="report-status"></span>
+        </div>
+        <div id="templateRoot" class="template-wrap" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+  </footer>
+
+  <script src="template-client.js"></script>
+</body>
+</html>

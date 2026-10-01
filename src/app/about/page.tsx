@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { site } from "@/lib/site";
 
 const VALUES = [
@@ -21,28 +20,25 @@ export const metadata = { title: "About Us" };
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
-      <header className="max-w-2xl">
-        <p className="text-blush-deep font-semibold tracking-wide">Our Story</p>
+      <header className="max-w-3xl">
+        <p className="text-blush-deep font-semibold tracking-wide">About Us</p>
         <h1 className="font-display font-bold text-4xl leading-tight mt-2">
-          Born in Chilahati, dressing little stars.
+          {site.name}
         </h1>
       </header>
 
       <div className="grid md:grid-cols-2 gap-12 mt-10 items-start">
         <div className="space-y-5 text-muted leading-relaxed">
           <p>
-            {site.name} started with one simple belief — parents in our corner of Nilphamari
-            deserve the same quality baby clothing you would find in Dhaka, without the trip or
-            the markup. What began as a small counter at Chilahati Bazar is today a favourite
-            stop for families from Dimla and beyond.
+            {site.name} is a trusted online shopping platform offering a wide range of products
+            for women, babies and children. Our goal is to provide our customers with quality
+            products at affordable prices, along with an easy, convenient and reliable online
+            shopping experience.
           </p>
           <p>
-            We personally select every romper, frock, bootie and bib — feeling the fabric,
-            testing the snaps and imagining how it will survive real baby life. If we would not
-            dress our own children in it, we do not sell it.
-          </p>
-          <p className="text-ink font-medium">
-            {site.tagline}.
+            Our collection includes ladies&rsquo; clothing, baby and kids&rsquo; wear, and essential
+            products for children&rsquo; essentials. We continuously strive to add new and exciting
+            products to our collection based on the preferences and needs of our customers.
           </p>
         </div>
 
@@ -63,6 +59,16 @@ export default function AboutPage() {
           </dl>
         </div>
       </div>
+
+      <section className="mt-16">
+        <h2 className="font-display font-bold text-3xl">Our Goal</h2>
+        <p className="mt-4 max-w-3xl text-muted leading-relaxed">
+          Our main goal is to make online shopping easier, safer and more convenient for everyone.
+          We want our customers to be able to browse their favorite products from the comfort of
+          their homes, place orders easily, and receive their purchases through a reliable delivery
+          service.
+        </p>
+      </section>
 
       <section className="mt-16 grid sm:grid-cols-3 gap-6">
         {VALUES.map((v) => (

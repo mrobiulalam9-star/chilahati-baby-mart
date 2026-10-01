@@ -16,7 +16,7 @@ export type DashboardProduct = {
   slug: string;
   name: string;
   category: string;
-  price: number;
+  price: number | null;
   oldPrice?: number;
   ages: string[];
   sizes: string[];
@@ -39,7 +39,7 @@ function staticToDashboard(p: (typeof staticProducts)[0], hidden: boolean, newAr
     slug: p.slug,
     name: o?.name ?? p.name,
     category: p.category,
-    price: o?.price ?? p.price,
+    price: o?.price === undefined ? p.price : o.price,
     oldPrice: o?.oldPrice ?? p.oldPrice,
     ages: o?.ages ?? p.ages,
     sizes: o?.sizes ?? p.sizes,
@@ -55,10 +55,12 @@ function staticToDashboard(p: (typeof staticProducts)[0], hidden: boolean, newAr
 }
 
 function adminToDashboard(p: AdminProduct, newArrivals: Set<string>): DashboardProduct {
+  const slug = p.slug?.trim() || `product-${p.id}`;
   return {
     ...p,
+    slug,
     source: "admin",
-    newArrival: newArrivals.has(p.slug),
+    newArrival: newArrivals.has(slug),
   };
 }
 

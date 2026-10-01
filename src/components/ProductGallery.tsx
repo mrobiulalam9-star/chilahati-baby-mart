@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { handleImageError } from "@/lib/site";
 
 type Props = {
   images: string[];
@@ -13,7 +14,12 @@ export default function ProductGallery({ images, name }: Props) {
     <div>
       <div className="relative aspect-[3/4] overflow-hidden border border-line rounded-3xl bg-white">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={images[active]} alt={name} className="absolute inset-0 h-full w-full object-cover" />
+        <img
+          src={images[active]}
+          alt={name}
+          onError={handleImageError}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
       </div>
       <div className="mt-4 flex gap-3">
         {images.map((img, i) => (
@@ -27,7 +33,13 @@ export default function ProductGallery({ images, name }: Props) {
             }`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={img} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+            <img
+              src={img}
+              alt=""
+              aria-hidden
+              onError={handleImageError}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
           </button>
         ))}
       </div>

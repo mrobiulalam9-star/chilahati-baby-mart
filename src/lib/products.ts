@@ -16,7 +16,7 @@ export type Product = {
   slug: string;
   name: string;
   category: string;
-  price: number;
+  price: number | null;
   oldPrice?: number;
   ages: AgeGroup[];
   sizes: string[];
@@ -1043,7 +1043,7 @@ export const products: Product[] = [
     ages: ["1-2y", "2-4y"],
     sizes: ["Free Size"],
     colors: ["Black", "Brown"],
-    images: ["/products/ladies-bag-01.jpg", "/products/ladies-bag-01.jpg"],
+    images: ["/products/ladies-bag-01-a.svg", "/products/ladies-bag-01-b.svg"],
     description: "Stylish handbag from the Chilahati Ladies and Baby Mart collection.",
   },
   {
@@ -1054,7 +1054,7 @@ export const products: Product[] = [
     ages: ["1-2y", "2-4y"],
     sizes: ["Free Size"],
     colors: ["Red", "Pink"],
-    images: ["/products/ladies-bag-02.jpg", "/products/ladies-bag-02.jpg"],
+    images: ["/products/ladies-bag-02-a.svg", "/products/ladies-bag-02-b.svg"],
     description: "Premium tote bag from the Chilahati Ladies and Baby Mart collection.",
   },
   {
@@ -1065,7 +1065,7 @@ export const products: Product[] = [
     ages: ["1-2y", "2-4y"],
     sizes: ["Free Size"],
     colors: ["Beige", "Black"],
-    images: ["/products/ladies-bag-03.jpg", "/products/ladies-bag-03.jpg"],
+    images: ["/products/ladies-bag-03-a.svg", "/products/ladies-bag-03-b.svg"],
     description: "Casual shoulder bag from the Chilahati Ladies and Baby Mart collection.",
   },
 ];

@@ -1,10 +1,11 @@
 import fs from "fs";
 import path from "path";
+import { readJsonFile } from "./data-json";
 
 export type StaticOverride = {
   slug: string;
   name?: string;
-  price?: number;
+  price?: number | null;
   oldPrice?: number;
   ages?: string[];
   sizes?: string[];
@@ -26,12 +27,9 @@ function ensureDataDir() {
 
 export function getOverrides(): Record<string, StaticOverride> {
   ensureDataDir();
-  if (!fs.existsSync(OVERRIDES_FILE)) return {};
-  try {
-    return JSON.parse(fs.readFileSync(OVERRIDES_FILE, "utf-8"));
-  } catch {
-    return {};
-  }
+  const data = readJsonFile<unknown>(OVERRIDES_FILE, {});
+  if (!data || typeof data !== "object" || Array.isArray(data)) return {};
+  return data as Record<string, StaticOverride>;
 }
 
 export function setStaticOverride(

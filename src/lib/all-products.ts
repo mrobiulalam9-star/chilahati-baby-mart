@@ -4,13 +4,14 @@ import { Product, products as staticProducts } from "./products";
 import { getHiddenSlugs } from "./admin-hidden";
 import { getOverrides } from "./admin-overrides";
 import { getNewArrivalSlugs } from "./admin-new-arrivals";
+import { readJsonFile } from "./data-json";
 
 export type AdminProduct = {
   id: string;
   slug: string;
   name: string;
   category: string;
-  price: number;
+  price: number | null;
   oldPrice?: number;
   ages: string[];
   sizes: string[];
@@ -26,20 +27,50 @@ export type AdminProduct = {
 function readAdminProducts(): AdminProduct[] {
   const dataDir = path.join(process.cwd(), "data");
   const productsFile = path.join(dataDir, "products.json");
-  if (!fs.existsSync(productsFile)) return [];
-  try {
-    const data = fs.readFileSync(productsFile, "utf-8");
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
+  const data = readJsonFile<unknown>(productsFile, []);
+  return Array.isArray(data) ? (data as AdminProduct[]) : [];
+}
+
+const PLACEHOLDER_IMAGE = "/products/placeholder.svg";
+const PUBLIC_DIR = path.join(process.cwd(), "public");
+
+/**
+ * Returns `url` if it points at a file that actually exists, otherwise the
+ * placeholder. Prevents a missing upload or a renamed asset from rendering a
+ * broken image on server-rendered pages, where an onError handler cannot help.
+ */
+function resolveImage(url: string | undefined | null, fallback: string): string {
+  if (!url || typeof url !== "string") return fallback;
+  if (/^(https?:)?\/\//.test(url) || url.startsWith("data:")) return url;
+  const clean = url.split("?")[0].split("#")[0];
+  if (!clean.startsWith("/")) return url;
+  const abs = path.join(PUBLIC_DIR, clean.replace(/^\/+/, ""));
+  return fs.existsSync(abs) ? clean : fallback;
+}
+
+function resolveImages(images: string[] | undefined, fallback: string): [string, string] {
+  const img1 = resolveImage(images?.[0], fallback);
+  const img2 = resolveImage(images?.[1], img1);
+  return [img1, img2];
+}
+
+/**
+ * Guarantees a usable slug. Records saved before blank names were allowed can
+ * have an empty slug, which would otherwise render as a link to "/product"
+ * (a 404). The id keeps the fallback stable and unique.
+ */
+function productSlug(admin: AdminProduct): string {
+  const slug = (admin.slug || "").trim();
+  if (slug) return slug;
+  const fromName = (admin.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  if (fromName) return fromName;
+  return `product-${admin.id}`;
 }
 
 function adminToProduct(admin: AdminProduct): Product {
-  const img1 = admin.images[0] || "/products/placeholder.jpg";
-  const img2 = admin.images[1] || img1;
+  const [img1, img2] = resolveImages(admin.images, PLACEHOLDER_IMAGE);
   return {
-    slug: admin.slug,
+    slug: productSlug(admin),
     name: admin.name,
     category: admin.category,
     price: admin.price,
@@ -56,12 +87,11 @@ function adminToProduct(admin: AdminProduct): Product {
 function applyOverrides(p: Product): Product {
   const o = getOverrides()[p.slug];
   if (!o || (!o.name && !o.price && !o.images)) return p;
-  const img1 = o.images?.[0] || p.images[0];
-  const img2 = o.images?.[1] || img1;
+  const [img1, img2] = resolveImages(o.images ?? p.images, PLACEHOLDER_IMAGE);
   return {
     ...p,
     name: o.name ?? p.name,
-    price: o.price ?? p.price,
+    price: o.price === undefined ? p.price : o.price,
     oldPrice: o.oldPrice ?? p.oldPrice,
     images: [img1, img2],
   };
@@ -70,7 +100,7 @@ function applyOverrides(p: Product): Product {
 export function getAllProducts(): Product[] {
   const hidden = new Set(getHiddenSlugs());
   const adminProducts = readAdminProducts()
-    .filter((p) => !hidden.has(p.slug))
+    .filter((p) => !hidden.has(productSlug(p)))
     .map(adminToProduct);
   const existingSlugs = new Set(staticProducts.map((p) => p.slug));
   const uniqueAdmin = adminProducts.filter((p) => !existingSlugs.has(p.slug));
@@ -109,7 +139,7 @@ export function getNewArrivals(count = 20): Product[] {
   const hidden = new Set(getHiddenSlugs());
   const bySlug = new Map<string, Product>();
   for (const p of staticProducts) bySlug.set(p.slug, applyOverrides(p));
-  for (const a of readAdminProducts()) bySlug.set(a.slug, adminToProduct(a));
+  for (const a of readAdminProducts()) bySlug.set(productSlug(a), adminToProduct(a));
 
   const order = getNewArrivalSlugs();
   const fallback = order.length === 0 ? NEW_ARRIVAL_SLUGS : order;
