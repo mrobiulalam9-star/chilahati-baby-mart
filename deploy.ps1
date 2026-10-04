@@ -48,6 +48,7 @@ $AppPaths = @(
     'postcss.config.mjs'
     'tsconfig.json'
     '.env.example'
+    '.gitignore'
     'deploy.ps1'
 )
 
