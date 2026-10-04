@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Product, products as staticProducts } from "./products";
 import { getHiddenSlugs } from "./admin-hidden";
-import { getOverrides } from "./admin-overrides";
+import { getOverrides, type StaticOverride } from "./admin-overrides";
 import { getNewArrivalSlugs } from "./admin-new-arrivals";
 import { readJsonFile } from "./data-json";
 
@@ -85,27 +85,57 @@ function adminToProduct(admin: AdminProduct): Product {
 }
 
 /**
- * Layers the admin panel's saved override onto a code-defined product.
+ * Layers an admin override onto a code-defined product.
  *
- * Blank text counts as "nothing to override", not as a value: the admin form
- * posts `""` for any field the shopkeeper leaves empty, and `??` would happily
- * accept that empty string and erase the product's name from the storefront
- * permanently. A `null` price is the opposite - it is the deliberate "price on
- * request" state - so it is preserved as-is.
+ * This is the single place where `data/overrides.json` is interpreted. The
+ * storefront (`applyOverrides`) and the admin APIs both call it, so a value can
+ * never look one way on the page and another in the dashboard.
+ *
+ * Two rules drive every field:
+ *
+ *  1. A field the override does not specify keeps the product's own value.
+ *     `setStaticOverride` writes with `JSON.stringify`, which drops `undefined`,
+ *     so "absent" is a real, reliable state on disk.
+ *  2. Empty is not a value. The admin form posts `""` for a blank text field
+ *     and `[]` for blank list fields, and the form posts `null` for a blank
+ *     price. Treating those as real values silently erased product names and
+ *     turned priced products into "price on request", so blanks fall back to
+ *     the product's own value instead.
+ *
+ * A product whose own `price` is null still renders as "price on request" -
+ * that state stays intentional, it just can't be triggered by accident here.
  */
-function applyOverrides(p: Product): Product {
-  const o = getOverrides()[p.slug];
-  if (!o) return p;
-  const name = o.name?.trim();
-  if (!name && o.price === undefined && !o.images?.length) return p;
-  const [img1, img2] = resolveImages(o.images?.length ? o.images : p.images, PLACEHOLDER_IMAGE);
+export function mergeStaticOverride(base: Product, override: StaticOverride | undefined): Product {
+  if (!override) return base;
+
+  const name = override.name?.trim();
+  const description = override.description?.trim();
+  const price =
+    typeof override.price === "number" && Number.isFinite(override.price)
+      ? override.price
+      : base.price;
+
+  const [img1, img2] = resolveImages(
+    override.images?.length ? override.images : base.images,
+    PLACEHOLDER_IMAGE
+  );
+
   return {
-    ...p,
-    name: name || p.name,
-    price: o.price === undefined ? p.price : o.price,
-    oldPrice: o.oldPrice ?? p.oldPrice,
+    ...base,
+    name: name || base.name,
+    price,
+    oldPrice: override.oldPrice ?? base.oldPrice,
+    description: description || base.description,
+    featured: typeof override.featured === "boolean" ? override.featured : base.featured,
+    ages: override.ages?.length ? (override.ages as Product["ages"]) : base.ages,
+    sizes: override.sizes?.length ? override.sizes : base.sizes,
+    colors: override.colors?.length ? override.colors : base.colors,
     images: [img1, img2],
   };
+}
+
+function applyOverrides(p: Product): Product {
+  return mergeStaticOverride(p, getOverrides()[p.slug]);
 }
 
 export function getAllProducts(): Product[] {

@@ -10,6 +10,7 @@ import {
 import { hideProduct } from "@/lib/admin-hidden";
 import { deleteStaticOverride, getOverrides, setStaticOverride } from "@/lib/admin-overrides";
 import { products as staticProducts } from "@/lib/products";
+import { mergeStaticOverride } from "@/lib/all-products";
 
 type Params = Promise<{ id: string }>;
 
@@ -60,20 +61,23 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
 
       setStaticOverride(slug, updates);
       const o = getOverrides()[slug];
+      // Echo back exactly what the storefront will now render, using the same
+      // merge, so a save that silently no-ops is visible immediately.
+      const merged = mergeStaticOverride(base, o);
       return NextResponse.json({
         product: {
           id,
-          slug,
-          name: o.name ?? base.name,
-          category: base.category,
-          price: o.price === undefined ? base.price : o.price,
-          oldPrice: o.oldPrice ?? base.oldPrice,
-          ages: o.ages ?? base.ages,
-          sizes: o.sizes ?? base.sizes,
-          colors: o.colors ?? base.colors,
-          images: o.images?.length ? o.images : [...base.images],
-          description: o.description ?? base.description,
-          featured: o.featured ?? (base.featured || false),
+          slug: merged.slug,
+          name: merged.name,
+          category: merged.category,
+          price: merged.price,
+          oldPrice: merged.oldPrice,
+          ages: merged.ages,
+          sizes: merged.sizes,
+          colors: merged.colors,
+          images: merged.images,
+          description: merged.description,
+          featured: merged.featured ?? false,
           stock: 999,
           source: "static",
           updatedAt: o.updatedAt,

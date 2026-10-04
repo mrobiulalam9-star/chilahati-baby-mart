@@ -9,6 +9,7 @@ import {
 import { products as staticProducts } from "@/lib/products";
 import { getHiddenSlugs, hideProduct, unhideProduct } from "@/lib/admin-hidden";
 import { getOverrides } from "@/lib/admin-overrides";
+import { mergeStaticOverride } from "@/lib/all-products";
 import { getNewArrivalSlugs } from "@/lib/admin-new-arrivals";
 
 export type DashboardProduct = {
@@ -33,20 +34,22 @@ export type DashboardProduct = {
 };
 
 function staticToDashboard(p: (typeof staticProducts)[0], hidden: boolean, newArrivals: Set<string>): DashboardProduct {
-  const o = getOverrides()[p.slug];
+  // Same merge the storefront uses, so the edit form is always populated with
+  // exactly what a visitor sees.
+  const merged = mergeStaticOverride(p, getOverrides()[p.slug]);
   return {
     id: `static_${p.slug}`,
-    slug: p.slug,
-    name: o?.name ?? p.name,
-    category: p.category,
-    price: o?.price === undefined ? p.price : o.price,
-    oldPrice: o?.oldPrice ?? p.oldPrice,
-    ages: o?.ages ?? p.ages,
-    sizes: o?.sizes ?? p.sizes,
-    colors: o?.colors ?? p.colors,
-    images: o?.images?.length ? [...o.images] : [...p.images],
-    description: o?.description ?? p.description,
-    featured: o?.featured ?? (p.featured || false),
+    slug: merged.slug,
+    name: merged.name,
+    category: merged.category,
+    price: merged.price,
+    oldPrice: merged.oldPrice,
+    ages: merged.ages,
+    sizes: merged.sizes,
+    colors: merged.colors,
+    images: merged.images,
+    description: merged.description,
+    featured: merged.featured ?? false,
     stock: 999,
     source: "static",
     hidden,
