@@ -47,7 +47,6 @@ $AppPaths = @(
     'next.config.ts'
     'postcss.config.mjs'
     'tsconfig.json'
-    'next-env.d.ts'
     '.env.example'
     'deploy.ps1'
 )
@@ -121,7 +120,12 @@ if (-not $PushOnly) {
     Write-Host '==> Checking types' -ForegroundColor Cyan
     Invoke-Native -FilePath 'npx.cmd' -NativeArgs @('tsc', '--noEmit') | Out-Null
 
-    Invoke-Git (@('add', '--') + $AppPaths) | Out-Null
+    # `add -u` updates only files git already tracks. A plain `add` would also
+    # sweep in brand-new untracked files under these directories - including
+    # throwaway scripts and downloaded responses that have no business on the
+    # server. Genuinely new source files still need an explicit
+    # `git add <file>` once, which is a deliberate act.
+    Invoke-Git (@('add', '-u', '--') + $AppPaths) | Out-Null
 
     $staged = @(Invoke-Git @('diff', '--cached', '--name-only'))
     if ($staged.Count -eq 0) {
