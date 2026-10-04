@@ -10,6 +10,16 @@ import { formatPrice, hasPrice } from "@/lib/site";
 
 type Params = Promise<{ slug: string }>;
 
+/**
+ * Product records live in `data/*.json` and are rewritten by the admin panel
+ * through plain `fs` calls, which the framework cannot detect as mutable input.
+ * Left alone, this route is prerendered - `generateStaticParams` bakes every
+ * known slug into static HTML and any slug added later is rendered once and
+ * then cached, so admin edits would never reach the live site. Rendering per
+ * request keeps price, photos and stock in step with the panel.
+ */
+export const dynamic = "force-dynamic";
+
 export function generateStaticParams() {
   return getAllProducts().map((p) => ({ slug: p.slug }));
 }

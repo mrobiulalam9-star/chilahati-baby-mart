@@ -5,6 +5,16 @@ import NewArrivals from "@/components/NewArrivals";
 import { categories } from "@/lib/products";
 import { getAllProducts, getNewArrivals } from "@/lib/all-products";
 
+/**
+ * The catalogue is read from `data/*.json`, which the admin panel rewrites at
+ * runtime. Those reads are plain `fs` calls, so the framework cannot tell that
+ * this page depends on mutable state and would happily freeze the rendered
+ * product list into static HTML at build time - after which admin edits only
+ * appear on the next deploy. Opting into per-request rendering keeps the
+ * storefront in step with the panel.
+ */
+export const dynamic = "force-dynamic";
+
 const TESTIMONIALS = [
   {
     quote:

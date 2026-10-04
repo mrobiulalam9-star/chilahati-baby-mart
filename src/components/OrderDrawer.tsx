@@ -9,7 +9,7 @@ import {
   MAX_QTY_PER_LINE,
   type DeliveryType,
 } from "@/lib/order-constants";
-import { formatPrice, site, waLink } from "@/lib/site";
+import { formatPrice, waLink } from "@/lib/site";
 
 type PlacedOrder = {
   id: string;
@@ -548,16 +548,17 @@ export default function OrderDrawer() {
                     <button
                       type="button"
                       onClick={() => setStep("shop")}
-                      className="flex-1 rounded-full border border-line bg-white px-4 py-3 text-center text-sm font-semibold transition-colors hover:border-blush hover:text-blush"
+                      className="rounded-full border border-line bg-white px-5 py-3 text-sm font-semibold transition-colors hover:border-blush hover:text-blush"
                     >
                       Add more products
                     </button>
-                    <a
-                      href={`tel:${site.phoneDisplay}`}
-                      className="flex-1 rounded-full border border-line bg-white px-4 py-3 text-center text-sm font-semibold transition-colors hover:border-blush hover:text-blush"
+                    <button
+                      type="button"
+                      onClick={() => setStep("details")}
+                      className="flex-1 rounded-full bg-blush px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blush-deep"
                     >
-                      Call the shop
-                    </a>
+                      Place order
+                    </button>
                   </div>
             </div>
           )}

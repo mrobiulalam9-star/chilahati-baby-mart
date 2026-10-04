@@ -84,13 +84,24 @@ function adminToProduct(admin: AdminProduct): Product {
   };
 }
 
+/**
+ * Layers the admin panel's saved override onto a code-defined product.
+ *
+ * Blank text counts as "nothing to override", not as a value: the admin form
+ * posts `""` for any field the shopkeeper leaves empty, and `??` would happily
+ * accept that empty string and erase the product's name from the storefront
+ * permanently. A `null` price is the opposite - it is the deliberate "price on
+ * request" state - so it is preserved as-is.
+ */
 function applyOverrides(p: Product): Product {
   const o = getOverrides()[p.slug];
-  if (!o || (!o.name && !o.price && !o.images)) return p;
-  const [img1, img2] = resolveImages(o.images ?? p.images, PLACEHOLDER_IMAGE);
+  if (!o) return p;
+  const name = o.name?.trim();
+  if (!name && o.price === undefined && !o.images?.length) return p;
+  const [img1, img2] = resolveImages(o.images?.length ? o.images : p.images, PLACEHOLDER_IMAGE);
   return {
     ...p,
-    name: o.name ?? p.name,
+    name: name || p.name,
     price: o.price === undefined ? p.price : o.price,
     oldPrice: o.oldPrice ?? p.oldPrice,
     images: [img1, img2],
