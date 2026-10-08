@@ -1,27 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useSyncExternalStore } from "react";
 import { categories, type Product } from "@/lib/products";
 import { formatPrice, hasPrice, handleImageError } from "@/lib/site";
 
-function subscribeReducedMotion(cb: () => void) {
-  const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-  mq.addEventListener("change", cb);
-  return () => mq.removeEventListener("change", cb);
-}
-
-function useReducedMotion(): boolean {
-  return useSyncExternalStore(
-    subscribeReducedMotion,
-    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    () => false
-  );
-}
-
 export default function NewArrivals({ items }: { items: Product[] }) {
-  const reducedMotion = useReducedMotion();
-
   if (items.length === 0) return null;
 
   const renderCard = (p: Product, suffix: string, duplicate = false) => {
@@ -99,23 +82,14 @@ export default function NewArrivals({ items }: { items: Product[] }) {
           </Link>
         </div>
 
-        {reducedMotion ? (
-          <div
-            role="region"
-            aria-label="New arrival products"
-            tabIndex={0}
-            className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-4 pb-2 sm:-mx-6 sm:px-6"
-          >
-            {items.map((p) => renderCard(p, "single"))}
-          </div>
-        ) : (
-          <div className="marquee-mask">
-            <div className="marquee-track animate-marquee">
-              {items.map((p) => renderCard(p, "copy-a"))}
-              {items.map((p) => renderCard(p, "copy-b", true))}
-            </div>
-          </div>
-        )}
+        <div
+          role="region"
+          aria-label="New arrival products"
+          tabIndex={0}
+          className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-4 pb-2 sm:-mx-6 sm:px-6"
+        >
+          {items.map((p) => renderCard(p, "single"))}
+        </div>
       </div>
     </section>
   );
