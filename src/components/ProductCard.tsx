@@ -22,6 +22,8 @@ export default function ProductCard({ slug, name, price, oldPrice, images, categ
           <img
             src={main}
             alt={name}
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-0"
           />
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -29,6 +31,8 @@ export default function ProductCard({ slug, name, price, oldPrice, images, categ
             src={alt ?? main}
             alt=""
             aria-hidden
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           />
           {showSave && (
