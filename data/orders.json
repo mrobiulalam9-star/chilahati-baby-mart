@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "id": "ord_1791457565286_tj6stp0",
+    "orderNo": "CBM-26010008-001",
+    "createdAt": "2026-10-08T11:06:05.286Z",
+    "updatedAt": "2026-10-08T11:06:05.286Z",
+    "status": "pending",
+    "customer": {
+      "name": "rabiul",
+      "phone": "01750776992",
+      "address": "531/2 shohidbag, dhaka",
+      "deliveryType": "home",
+      "note": "dfasf"
+    },
+    "items": [
+      {
+        "slug": "cloud-cotton-romper",
+        "name": "Cloud Cotton Romper",
+        "price": 450,
+        "quantity": 1,
+        "image": "/products/cloud-cotton-romper-a.jpg",
+        "lineTotal": 450
+      }
+    ],
+    "subtotal": 450,
+    "deliveryCharge": 80,
+    "total": 530,
+    "hasUnpricedItems": false
+  }
+]
