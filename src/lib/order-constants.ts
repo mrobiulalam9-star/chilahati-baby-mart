@@ -35,7 +35,7 @@ export const DELIVERY_CHARGE_STORE = 0;
 /** Home delivery: 80 taka inside Dhaka, 180 taka nationwide. Store pickup is free. */
 export function deliveryChargeFor(deliveryType: DeliveryType, address = ""): number {
   if (deliveryType !== "home") return DELIVERY_CHARGE_STORE;
-  return /dhaka/i.test(address) ? DELIVERY_CHARGE_DHAKA : DELIVERY_CHARGE_NATIONWIDE;
+  return /dhaka|ঢাকা/i.test(address) ? DELIVERY_CHARGE_DHAKA : DELIVERY_CHARGE_NATIONWIDE;
 }
 
 export const MAX_LINES_PER_ORDER = 30;
