@@ -105,9 +105,9 @@ export async function POST(req: NextRequest) {
       stock,
     } = body;
 
-    if (!name || !category || !price) {
+    if (!name || !category) {
       return NextResponse.json(
-        { error: "Name, category, and price are required" },
+        { error: "Name and category are required" },
         { status: 400 }
       );
     }
@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
       slug,
       name,
       category,
-      price: Number(price),
+      price: price === "" || price === null || price === undefined ? null : Number(price),
       oldPrice: oldPrice ? Number(oldPrice) : undefined,
       ages: ages || [],
       sizes: sizes || [],

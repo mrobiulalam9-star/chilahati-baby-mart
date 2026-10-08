@@ -79,7 +79,9 @@ export default function AdminDashboardPage() {
 
   const showMessage = (text: string, type: "success" | "error") => {
     setMessage({ text, type });
-    setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
+    if (type === "success") {
+      setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
+    }
   };
 
   const handleLogout = async () => {
@@ -202,6 +204,12 @@ export default function AdminDashboardPage() {
     setSubmitting(true);
 
     try {
+      if (!form.name.trim()) {
+        showMessage("Please enter a product name.", "error");
+        setSubmitting(false);
+        return;
+      }
+
       const editingSlug = editingId ? products.find((p) => p.id === editingId)?.slug : undefined;
       const wasNewArrival = editingSlug ? newArrivals.includes(editingSlug) : false;
 
