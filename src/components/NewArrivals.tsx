@@ -1,10 +1,33 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { categories, type Product } from "@/lib/products";
 import { formatPrice, hasPrice, handleImageError } from "@/lib/site";
 
 export default function NewArrivals({ items }: { items: Product[] }) {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const id = setInterval(() => {
+      if (pausedRef.current || document.hidden) return;
+      if (el.scrollWidth <= el.clientWidth + 4) return;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (el.scrollLeft >= maxScroll - 8) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: 260, behavior: "smooth" });
+      }
+    }, 3000);
+
+    return () => clearInterval(id);
+  }, []);
+
   if (items.length === 0) return null;
 
   const renderCard = (p: Product, suffix: string, duplicate = false) => {
@@ -83,9 +106,12 @@ export default function NewArrivals({ items }: { items: Product[] }) {
         </div>
 
         <div
+          ref={trackRef}
           role="region"
           aria-label="New arrival products"
           tabIndex={0}
+          onMouseEnter={() => (pausedRef.current = true)}
+          onMouseLeave={() => (pausedRef.current = false)}
           className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-4 pb-2 sm:-mx-6 sm:px-6"
         >
           {items.map((p) => renderCard(p, "single"))}

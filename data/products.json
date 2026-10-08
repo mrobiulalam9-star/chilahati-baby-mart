@@ -93,7 +93,7 @@
     "updatedAt": "2026-10-08T12:14:53.321Z"
   },
   {
-    "slug": "product-1791462351390",
+    "slug": "product-1791462502674",
     "name": "",
     "category": "baby-clothing",
     "price": null,
@@ -101,15 +101,49 @@
     "sizes": [],
     "colors": [],
     "images": [
-      "/products/upload_1791462329098_7m6rsr.jpeg",
-      "/products/upload_1791462337248_p5be0u.jpeg",
-      "/products/upload_1791462348370_3f7cev.jpeg"
+      "/products/upload_1791462500523_a6av1n.jpeg"
     ],
     "description": "",
     "featured": false,
     "stock": 50,
-    "id": "prod_1791462351391_df1gv73",
-    "createdAt": "2026-10-08T12:25:51.391Z",
-    "updatedAt": "2026-10-08T12:25:51.391Z"
+    "id": "prod_1791462502674_25y4cvc",
+    "createdAt": "2026-10-08T12:28:22.674Z",
+    "updatedAt": "2026-10-08T12:28:22.674Z"
+  },
+  {
+    "slug": "product-1791462516481",
+    "name": "",
+    "category": "baby-clothing",
+    "price": null,
+    "ages": [],
+    "sizes": [],
+    "colors": [],
+    "images": [
+      "/products/upload_1791462514668_rxrvgx.jpeg"
+    ],
+    "description": "",
+    "featured": false,
+    "stock": 50,
+    "id": "prod_1791462516482_gn5jids",
+    "createdAt": "2026-10-08T12:28:36.482Z",
+    "updatedAt": "2026-10-08T12:28:36.482Z"
+  },
+  {
+    "slug": "product-1791462531640",
+    "name": "",
+    "category": "baby-clothing",
+    "price": null,
+    "ages": [],
+    "sizes": [],
+    "colors": [],
+    "images": [
+      "/products/upload_1791462529463_hf2l7y.jpeg"
+    ],
+    "description": "",
+    "featured": false,
+    "stock": 50,
+    "id": "prod_1791462531641_bvmeqkp",
+    "createdAt": "2026-10-08T12:28:51.641Z",
+    "updatedAt": "2026-10-08T12:28:51.641Z"
   }
 ]
