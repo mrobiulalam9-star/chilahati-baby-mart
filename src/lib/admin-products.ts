@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { readJsonFile } from "./data-json";
+import { liveJson } from "./live-sync";
 
 export type AdminProduct = {
   id: string;
@@ -31,8 +32,24 @@ function ensureDataDir() {
 
 function readProducts(): AdminProduct[] {
   ensureDataDir();
-  const data = readJsonFile<unknown>(PRODUCTS_FILE, []);
-  return Array.isArray(data) ? (data as AdminProduct[]) : [];
+  const local = readJsonFile<unknown>(PRODUCTS_FILE, []);
+  const localList = Array.isArray(local) ? (local as AdminProduct[]) : [];
+
+  const remote = liveJson<unknown>("data/products.json");
+  if (!remote || !Array.isArray(remote)) return localList;
+
+  const byId = new Map<string, AdminProduct>();
+  for (const p of localList) {
+    if (p && typeof p === "object" && typeof (p as AdminProduct).id === "string") {
+      byId.set((p as AdminProduct).id, p as AdminProduct);
+    }
+  }
+  for (const r of remote) {
+    if (r && typeof r === "object" && typeof (r as AdminProduct).id === "string") {
+      byId.set((r as AdminProduct).id, r as AdminProduct);
+    }
+  }
+  return Array.from(byId.values());
 }
 
 function writeProducts(products: AdminProduct[]) {
