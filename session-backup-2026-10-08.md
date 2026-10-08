@@ -62,6 +62,26 @@ stay in sync with local `http://localhost:3003/`. All changes are live on both.
     `curl` admin login returns 500 (request artifact) — use the browser or
     PowerShell `Invoke-WebRequest` with a WebRequestSession for API checks.
     Production admin login is `admin` / `admin123` (same as local .env).
+16. **LIVE SYNC (data is now instant)** — the site reads product data from
+    `data/*.json` at request time (pages are `force-dynamic`), but Render's
+    disk copy only changed on rebuilds. New `src/lib/live-sync.ts`: on
+    production (never in dev/build), the server also fetches the freshest
+    `products.json`, `overrides.json`, `hidden-products.json`,
+    `new-arrivals.json` from `https://raw.githubusercontent.com/mrobiulalam9-star/chilahati-baby-mart/main/...`
+    (12s cache, background refresh, keeps last good value 15 min), and merges
+    remote OVER local (union by id for products; remote wins per key for
+    overrides; union for hidden/new-arrivals), so prod-admin-only records are
+    never lost. Merged into all readers: `all-products.ts`,
+    `admin-products.ts`, `admin-hidden.ts`, `admin-overrides.ts`,
+    `admin-new-arrivals.ts`. Images uploaded locally that aren't on Render's
+    disk yet are served from the same GitHub raw base via `remoteImageUrl`
+    fallback in `resolveImage`. `/shop` page made `force-dynamic` too.
+    VERIFIED END-TO-END: pushed a probe (updatedAt change) -> appeared on
+    production in ~40s WITH NO REBUILD; reverted -> production followed on the
+    next request. Net effect: product/price/New-Arrival/data edits on
+    localhost:3003 go live on onrender.com in ~30-60s (only code changes still
+    wait for the ~5 min build).
+    Env overrides if the repo ever moves: `LIVE_GIT_OWNER`, `LIVE_GIT_REPO`, `LIVE_GIT_BRANCH`.
 
 Verified live: the deployed client bundle contains "Your Address" and
 `deliveryChargeFor`; `House / road` is gone from production.
