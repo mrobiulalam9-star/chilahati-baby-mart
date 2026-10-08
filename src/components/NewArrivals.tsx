@@ -14,21 +14,37 @@ export default function NewArrivals({ items }: { items: Product[] }) {
     if (!el) return;
     if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const id = setInterval(() => {
-      if (pausedRef.current || document.hidden) return;
-      if (el.scrollWidth <= el.clientWidth + 4) return;
-      const maxScroll = el.scrollWidth - el.clientWidth;
-      if (el.scrollLeft >= maxScroll - 8) {
-        el.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        el.scrollBy({ left: 260, behavior: "smooth" });
-      }
-    }, 3000);
+    const first = el.querySelector("a");
+    const step = (first ? first.getBoundingClientRect().width : 260) + 20;
 
-    return () => clearInterval(id);
+    let raf = 0;
+    const tick = () => {
+      if (!pausedRef.current && !document.hidden && el.scrollWidth > el.clientWidth + 4) {
+        if (el.scrollLeft >= step - 1) {
+          el.scrollLeft = 0;
+        } else {
+          el.scrollLeft += 1.2;
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   if (items.length === 0) return null;
+
+  const scrollTo = (dir: 1 | -1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const first = el.querySelector("a");
+    const step = (first ? first.getBoundingClientRect().width : 260) + 20;
+    if (dir === 1 && el.scrollLeft >= step - 1) {
+      el.scrollLeft = 0;
+    } else {
+      el.scrollLeft = Math.max(0, el.scrollLeft + dir * step);
+    }
+  };
 
   const renderCard = (p: Product, suffix: string, duplicate = false) => {
     const main = p.images[0];
@@ -105,16 +121,39 @@ export default function NewArrivals({ items }: { items: Product[] }) {
           </Link>
         </div>
 
-        <div
-          ref={trackRef}
-          role="region"
-          aria-label="New arrival products"
-          tabIndex={0}
-          onMouseEnter={() => (pausedRef.current = true)}
-          onMouseLeave={() => (pausedRef.current = false)}
-          className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-4 pb-2 sm:-mx-6 sm:px-6"
-        >
-          {items.map((p) => renderCard(p, "single"))}
+        <div className="relative">
+          <button
+            type="button"
+            aria-label="Scroll new arrivals left"
+            onClick={() => scrollTo(-1)}
+            className="absolute left-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-white/95 text-blush shadow-md transition hover:bg-white hover:text-blush-deep"
+          >
+            <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+              <path fillRule="evenodd" d="M12.7 15.7a1 1 0 0 1-1.4 0l-5-5a1 1 0 0 1 0-1.4l5-5a1 1 0 1 1 1.4 1.4L8.4 10l4.3 4.3a1 1 0 0 1 0 1.4Z" clipRule="evenodd" />
+            </svg>
+          </button>
+          <div
+            ref={trackRef}
+            role="region"
+            aria-label="New arrival products"
+            tabIndex={0}
+            onMouseEnter={() => (pausedRef.current = true)}
+            onMouseLeave={() => (pausedRef.current = false)}
+            className="no-scrollbar -mx-4 flex gap-5 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6"
+          >
+            {items.map((p) => renderCard(p, "single"))}
+            {items.length > 1 && renderCard(items[0], "clone", true)}
+          </div>
+          <button
+            type="button"
+            aria-label="Scroll new arrivals right"
+            onClick={() => scrollTo(1)}
+            className="absolute right-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-white/95 text-blush shadow-md transition hover:bg-white hover:text-blush-deep"
+          >
+            <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+              <path fillRule="evenodd" d="M7.3 4.3a1 1 0 0 1 1.4 0l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 1 1-1.4-1.4L11.6 10 7.3 5.7a1 1 0 0 1 0-1.4Z" clipRule="evenodd" />
+            </svg>
+          </button>
         </div>
       </div>
     </section>
