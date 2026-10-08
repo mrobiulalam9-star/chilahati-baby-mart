@@ -589,7 +589,7 @@ export default function OrderDrawer() {
                   value={details.name}
                   onChange={(e) => setDetails({ ...details, name: e.target.value })}
                   className={`w-full rounded-xl border bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-blush ${errors.name ? "border-red-300" : "border-line"}`}
-                  placeholder="e.g. Rahima Khatun"
+                  placeholder="Your name"
                 />
                 {errors.name && <span className="mt-1 block text-xs text-red-600">{errors.name}</span>}
               </label>
