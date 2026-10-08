@@ -7,6 +7,8 @@ import { hasPrice } from "@/lib/site";
 
 export const metadata = { title: "Shop" };
 
+export const dynamic = "force-dynamic";
+
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 function first(v: string | string[] | undefined): string | undefined {

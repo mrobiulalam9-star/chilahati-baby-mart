@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { readJsonFile } from "./data-json";
+import { liveJson } from "./live-sync";
 
 export type StaticOverride = {
   slug: string;
@@ -27,9 +28,15 @@ function ensureDataDir() {
 
 export function getOverrides(): Record<string, StaticOverride> {
   ensureDataDir();
-  const data = readJsonFile<unknown>(OVERRIDES_FILE, {});
-  if (!data || typeof data !== "object" || Array.isArray(data)) return {};
-  return data as Record<string, StaticOverride>;
+  const local = readJsonFile<unknown>(OVERRIDES_FILE, {});
+  const localData =
+    !local || typeof local !== "object" || Array.isArray(local)
+      ? {}
+      : (local as Record<string, StaticOverride>);
+
+  const remote = liveJson<unknown>("data/overrides.json");
+  if (!remote || typeof remote !== "object" || Array.isArray(remote)) return localData;
+  return { ...localData, ...(remote as Record<string, StaticOverride>) };
 }
 
 export function setStaticOverride(

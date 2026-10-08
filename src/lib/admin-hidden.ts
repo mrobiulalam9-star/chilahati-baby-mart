@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { readJsonFile } from "./data-json";
+import { liveJson } from "./live-sync";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const HIDDEN_FILE = path.join(DATA_DIR, "hidden-products.json");
@@ -13,8 +14,15 @@ function ensureDataDir() {
 
 function readHidden(): string[] {
   ensureDataDir();
-  const data = readJsonFile<unknown>(HIDDEN_FILE, []);
-  return Array.isArray(data) ? data.filter((s): s is string => typeof s === "string") : [];
+  const local = readJsonFile<unknown>(HIDDEN_FILE, []);
+  const localList = Array.isArray(local)
+    ? local.filter((s): s is string => typeof s === "string")
+    : [];
+
+  const remote = liveJson<unknown>("data/hidden-products.json");
+  if (!remote || !Array.isArray(remote)) return localList;
+  const remoteList = remote.filter((s): s is string => typeof s === "string");
+  return Array.from(new Set([...remoteList, ...localList]));
 }
 
 function writeHidden(slugs: string[]) {

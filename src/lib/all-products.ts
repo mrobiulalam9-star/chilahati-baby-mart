@@ -5,6 +5,7 @@ import { getHiddenSlugs } from "./admin-hidden";
 import { getOverrides, type StaticOverride } from "./admin-overrides";
 import { getNewArrivalSlugs } from "./admin-new-arrivals";
 import { readJsonFile } from "./data-json";
+import { liveJson, remoteImageUrl } from "./live-sync";
 
 export type AdminProduct = {
   id: string;
@@ -27,8 +28,24 @@ export type AdminProduct = {
 function readAdminProducts(): AdminProduct[] {
   const dataDir = path.join(process.cwd(), "data");
   const productsFile = path.join(dataDir, "products.json");
-  const data = readJsonFile<unknown>(productsFile, []);
-  return Array.isArray(data) ? (data as AdminProduct[]) : [];
+  const local = readJsonFile<unknown>(productsFile, []);
+  const localList = Array.isArray(local) ? (local as AdminProduct[]) : [];
+
+  const remote = liveJson<unknown>("data/products.json");
+  if (!remote || !Array.isArray(remote)) return localList;
+
+  const byId = new Map<string, AdminProduct>();
+  for (const p of localList) {
+    if (p && typeof p === "object" && typeof (p as AdminProduct).id === "string") {
+      byId.set((p as AdminProduct).id, p as AdminProduct);
+    }
+  }
+  for (const r of remote) {
+    if (r && typeof r === "object" && typeof (r as AdminProduct).id === "string") {
+      byId.set((r as AdminProduct).id, r as AdminProduct);
+    }
+  }
+  return Array.from(byId.values());
 }
 
 const PLACEHOLDER_IMAGE = "/products/placeholder.svg";
@@ -45,7 +62,8 @@ function resolveImage(url: string | undefined | null, fallback: string): string 
   const clean = url.split("?")[0].split("#")[0];
   if (!clean.startsWith("/")) return url;
   const abs = path.join(PUBLIC_DIR, clean.replace(/^\/+/, ""));
-  return fs.existsSync(abs) ? clean : fallback;
+  if (fs.existsSync(abs)) return clean;
+  return remoteImageUrl(clean) ?? fallback;
 }
 
 function resolveImages(images: string[] | undefined, fallback: string): [string, string] {
