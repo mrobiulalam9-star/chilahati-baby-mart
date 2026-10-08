@@ -27,9 +27,16 @@ export const DELIVERY_LABELS: Record<DeliveryType, string> = {
   store: "Store pickup",
 };
 
-/** Courier fee inside Chilahati; nationwide courier is quoted per order. */
-export const DELIVERY_CHARGE_HOME = 60;
+/** Courier fee based on the delivery address: Dhaka, or nationwide. */
+export const DELIVERY_CHARGE_DHAKA = 80;
+export const DELIVERY_CHARGE_NATIONWIDE = 180;
 export const DELIVERY_CHARGE_STORE = 0;
+
+/** Home delivery: 80 taka inside Dhaka, 180 taka nationwide. Store pickup is free. */
+export function deliveryChargeFor(deliveryType: DeliveryType, address = ""): number {
+  if (deliveryType !== "home") return DELIVERY_CHARGE_STORE;
+  return /dhaka/i.test(address) ? DELIVERY_CHARGE_DHAKA : DELIVERY_CHARGE_NATIONWIDE;
+}
 
 export const MAX_LINES_PER_ORDER = 30;
 export const MAX_QTY_PER_LINE = 20;

@@ -7,7 +7,7 @@ import {
   type OrderStatus,
 } from "./order-constants";
 
-export { ORDER_STATUSES, DELIVERY_CHARGE_HOME, DELIVERY_CHARGE_STORE, MAX_LINES_PER_ORDER, MAX_QTY_PER_LINE } from "./order-constants";
+export { ORDER_STATUSES, deliveryChargeFor, DELIVERY_CHARGE_DHAKA, DELIVERY_CHARGE_NATIONWIDE, DELIVERY_CHARGE_STORE, MAX_LINES_PER_ORDER, MAX_QTY_PER_LINE } from "./order-constants";
 export type { DeliveryType, OrderStatus } from "./order-constants";
 
 /**

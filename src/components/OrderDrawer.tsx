@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cartLineKey, useCart, type CartItem } from "@/components/CartContext";
 import {
-  DELIVERY_CHARGE_HOME,
+  deliveryChargeFor,
   DELIVERY_LABELS,
   MAX_QTY_PER_LINE,
   type DeliveryType,
@@ -115,7 +115,7 @@ export default function OrderDrawer() {
     });
   }, [catalogue, search, activeCategory]);
 
-  const deliveryCharge = details.deliveryType === "home" ? DELIVERY_CHARGE_HOME : 0;
+  const deliveryCharge = deliveryChargeFor(details.deliveryType, details.address);
   const total = subtotal + deliveryCharge;
 
   useEffect(() => {
@@ -529,7 +529,7 @@ export default function OrderDrawer() {
                     </div>
                     <div className="flex justify-between">
                       <dt className="text-muted">Delivery (home)</dt>
-                      <dd className="font-semibold tabular-nums">{formatPrice(DELIVERY_CHARGE_HOME)}</dd>
+                      <dd className="font-semibold tabular-nums">{formatPrice(deliveryCharge)}</dd>
                     </div>
                     <div className="flex justify-between border-t border-line pt-2 text-base">
                       <dt className="font-semibold">Estimated total</dt>
@@ -615,7 +615,7 @@ export default function OrderDrawer() {
                   How would you like it?
                 </legend>
                 <div className="grid grid-cols-2 gap-2">
-                  {(["home", "store"] as DeliveryType[]).map((option) => (
+                  {(["home"] as DeliveryType[]).map((option) => (
                     <label
                       key={option}
                       className={`cursor-pointer rounded-xl border px-4 py-3 text-sm transition-colors ${
@@ -647,7 +647,7 @@ export default function OrderDrawer() {
                   value={details.address}
                   onChange={(e) => setDetails({ ...details, address: e.target.value })}
                   className={`w-full resize-none rounded-xl border bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-blush ${errors.address ? "border-red-300" : "border-line"}`}
-                  placeholder="House / road / area, Chilahati Bazar, Dimla"
+                  placeholder="Your Address"
                 />
                 {errors.address && <span className="mt-1 block text-xs text-red-600">{errors.address}</span>}
               </label>

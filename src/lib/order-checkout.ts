@@ -1,8 +1,7 @@
 import { getAllProducts } from "./all-products";
 import { getAdminProductBySlug, updateAdminProduct } from "./admin-products";
 import {
-  DELIVERY_CHARGE_HOME,
-  DELIVERY_CHARGE_STORE,
+  deliveryChargeFor,
   MAX_LINES_PER_ORDER,
   MAX_QTY_PER_LINE,
   type DeliveryType,
@@ -165,7 +164,7 @@ export function prepareOrder(body: Record<string, unknown>): PreparedResult {
 
   const subtotal = items.reduce((sum, i) => sum + (i.lineTotal ?? 0), 0);
   const hasUnpricedItems = items.some((i) => i.price === null);
-  const deliveryCharge = customer.value.deliveryType === "home" ? DELIVERY_CHARGE_HOME : DELIVERY_CHARGE_STORE;
+  const deliveryCharge = deliveryChargeFor(customer.value.deliveryType, customer.value.address);
 
   return {
     ok: true,
