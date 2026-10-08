@@ -46,6 +46,22 @@ stay in sync with local `http://localhost:3003/`. All changes are live on both.
     each with the hover-image fallback).
 12. **Zip backup** — `chilahati-baby-mart-backup-2026-10-08_1732.zip` (14.1 MB,
     app source only, excludes .next/node_modules/.git).
+13. **New Arrival: continuous scroll + arrows** — after removing the duplicate
+    marquee, the strip now auto-scrolls **continuously** (rAF, smooth loop that
+    is seamless via ONE hidden trailing clone card, so each product never shows
+    twice) and gets left/right arrow buttons for manual one-card navigation
+    (`src/components/NewArrivals.tsx`). Pauses on hover; respects reduced-motion.
+14. **Product Name optional in admin** — add/edit product no longer requires a
+    name; only Category is required. Blank names get an auto slug
+    `product-<timestamp>`; error message changed to "Category is required"
+    (`src/app/api/admin/products/route.ts`, `src/app/admin/dashboard/page.tsx`).
+15. **Sync verified end-to-end** — a localhost change auto-pushes (watcher) and
+    Render rebuilds in ~3-6 min, so production lags briefly; old code answers
+    until the new build swaps in (looks like "not updated"). Confirmed live on
+    production: create product without name -> 201, delete -> 200. Caveat:
+    `curl` admin login returns 500 (request artifact) — use the browser or
+    PowerShell `Invoke-WebRequest` with a WebRequestSession for API checks.
+    Production admin login is `admin` / `admin123` (same as local .env).
 
 Verified live: the deployed client bundle contains "Your Address" and
 `deliveryChargeFor`; `House / road` is gone from production.
