@@ -18,31 +18,59 @@ const SUGGESTIONS = categories
   .map((c) => c.name)
   .join(", ");
 
+const REPLIES: Record<string, { bn: string; en: string }> = {
+  address: {
+    bn: "আমাদের ঠিকানা: শহীদবাগ, মসজিদ গলি, ৫৩১/২ শবনম ভিলা, ঢাকা।",
+    en: "Our address: Shohidbag, mosque goli, 531/2 Shobnom Villa, Dhaka.",
+  },
+  delivery: {
+    bn: `ঢাকার ভিতরে হোম ডেলিভারি চার্জ ৮০ টাকা এবং ঢাকার বাইরে ১৮০ টাকা। ডেলিভারি চার্জ জানতে বা অর্ডার করতে কল করুন: ${site.phoneDisplay}`,
+    en: `Home delivery is 80 tk inside Dhaka and 180 tk outside Dhaka. Call us for the delivery charge or to place an order: ${site.phoneDisplay}`,
+  },
+  hours: {
+    bn: "আমাদের দোকান ২৪ ঘণ্টা খোলা থাকে।",
+    en: "Our shop hours: 24 hours.",
+  },
+  order: {
+    bn: `অর্ডার করতে কল করুন বা হোয়াটসঅ্যাপ করুন:\n📞 ${site.phoneDisplay}\n\nনিচের "Chat on WhatsApp" বাটন দিয়েও সরাসরি মেসেজ পাঠাতে পারেন।`,
+    en: `To place an order, call or WhatsApp us:\n📞 ${site.phoneDisplay}\n\nYou can also send a message directly using the "Chat on WhatsApp" button below.`,
+  },
+  products: {
+    bn: `আমাদের দোকানে ${SUGGESTIONS} — আরও অনেক কিছু পাওয়া যায়। /shop পেজে গিয়ে দেখুন!`,
+    en: `We carry ${SUGGESTIONS} and much more. Browse the /shop page to explore!`,
+  },
+  price: {
+    bn: "সব পণ্যের দাম /shop পেজে দেখানো আছে। সবচেয়ে সঠিক দামের জন্য নিচের WhatsApp বাটনে ট্যাপ করুন।",
+    en: "Prices for all products are shown on the shop page. For the latest price, tap the WhatsApp button below.",
+  },
+  greeting: {
+    bn: "ওয়া আলাইকুম আসসালাম! 🙏 চিলাহাটি লেডিজ অ্যান্ড বেবি মার্টে স্বাগতম। আমরা কীভাবে আপনাকে সাহায্য করতে পারি?",
+    en: "Wa Alaikum Assalam! 🙏 Welcome to Chilahati Ladies and Baby Mart. How can I help you?",
+  },
+  fallback: {
+    bn: `দুঃখিত, আমি বুঝতে পারিনি 😊 নিচের অপশনগুলো থেকে বেছে নিন, অথবা কল করুন ${site.phoneDisplay} — একজন মানুষ সাহায্য করবে!`,
+    en: `Sorry, I didn't understand that 😊 Please choose from the options below, or call ${site.phoneDisplay} and a real person will help!`,
+  },
+};
+
+function isBengali(input: string): boolean {
+  return /[\u0980-\u09FF]/.test(input);
+}
+
 function botReply(input: string): string {
   const t = input.toLowerCase();
+  let key: keyof typeof REPLIES = "fallback";
 
-  if (/address|location|where/.test(t)) {
-    return "Our address: Shohidbag, mosque goli, 531/2 Shobnom Villa, Dhaka.";
-  }
-  if (/deliver|shipping|charge|fee|courier/.test(t)) {
-    return "We offer home delivery in dhaka 80 tk and outside of dhaka 180 tk. Call us for the delivery charge or to place an order " + site.phoneDisplay;
-  }
-  if (/hour|time|open|close|when/.test(t)) {
-    return "Our Shop Hours: 24 Hours";
-  }
-  if (/order|buy|purchase/.test(t)) {
-    return `To place an order, call or WhatsApp us:\n📞 ${site.phoneDisplay}\n\nYou can also send a message directly using the "Chat on WhatsApp" button below.`;
-  }
-  if (/shop|product|sell|available/.test(t)) {
-    return `We carry ${SUGGESTIONS} and much more. Browse the /shop page to explore!`;
-  }
-  if (/price|cost|rate/.test(t)) {
-    return "Prices for all products are shown on the shop page. For the latest price, tap the WhatsApp button below.";
-  }
-  if (/hi|hello|assalam|hey|salam/.test(t)) {
-    return `Wa Alaikum Assalam! 🙏 Welcome to Chilahati Ladies and Baby Mart. How can I help you?`;
-  }
-  return `Sorry, I didn't understand that 😊 Please choose from the options below, or call ${site.phoneDisplay} and a real person will help!`;
+  if (/address|location|where|ঠিকানা/.test(t)) key = "address";
+  else if (/deliver|shipping|charge|fee|courier|ডেলিভারি|চার্জ/.test(t)) key = "delivery";
+  else if (/hour|time|open|close|when|ঘণ্টা|সময়/.test(t)) key = "hours";
+  else if (/order|buy|purchase|অর্ডার/.test(t)) key = "order";
+  else if (/shop|product|sell|available|পণ্য/.test(t)) key = "products";
+  else if (/price|cost|rate|দাম/.test(t)) key = "price";
+  else if (/hi|hello|assalam|hey|salam|আসসালাম|হ্যালো/.test(t)) key = "greeting";
+
+  const reply = REPLIES[key];
+  return isBengali(input) ? `${reply.bn}\n\n${reply.en}` : `${reply.en}\n\n${reply.bn}`;
 }
 
 export default function Chatbot() {
@@ -51,7 +79,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Msg[]>([
     {
       from: "bot",
-      text: `Assalamu Alaikum! 👋 Welcome to ${site.name}. Ask us about products, delivery, or orders.`,
+      text: `আসসালামু আলাইকুম! 👋 ${site.name} এ স্বাগতম। পণ্য, ডেলিভারি বা অর্ডার সম্পর্কে জিজ্ঞাসা করুন।\n\nAssalamu Alaikum! 👋 Welcome to ${site.name}. Ask us about products, delivery, or orders.`,
     },
   ]);
 
