@@ -20,6 +20,17 @@ stay in sync with local `http://localhost:3003/`. All changes are live on both.
    `src/ public/ data/ scripts/` + config files; after 15s of quiet it commits
    and pushes to `main`, so Render mirrors every local change automatically.
    Pushed as `3ba4f1e`.
+6. **Name placeholder** — name field now shows "Your name"
+   (`src/components/OrderDrawer.tsx`).
+7. **Bilingual chatbot** — every bot answer returns BOTH Bangla and English.
+   Bengali unicode range `[\u0980-\u09FF]` detected so the customer's language
+   is answered first (`src/components/Chatbot.tsx`). Intents: address, delivery,
+   hours, order, products, price, greeting, fallback.
+8. **Form supports Bangla** — inputs/textareas explicitly use the Bangla font
+   (`--font-sans` in `src/app/globals.css`) so Bangla renders in the order form.
+9. **Bangla "ঢাকা" in charge rule** — `deliveryChargeFor` now matches both
+   `dhaka` and `ঢাকা`, so a Bangla-written Dhaka address gets the 80 taka rate
+   (`src/lib/order-constants.ts`).
 
 Verified live: the deployed client bundle contains "Your Address" and
 `deliveryChargeFor`; `House / road` is gone from production.
@@ -40,8 +51,10 @@ Verified live: the deployed client bundle contains "Your Address" and
   (Ctrl+F5); both sites run the identical deployed bundle.
 
 ## Useful paths
-- Delivery charge rule: `src/lib/order-constants.ts:30` (`deliveryChargeFor`)
+- Delivery charge rule: `src/lib/order-constants.ts` (`deliveryChargeFor`, matches `dhaka` / `ঢাকা`)
+- Chatbot: `src/components/Chatbot.tsx` (bilingual `REPLIES`)
 - Order drawer UI: `src/components/OrderDrawer.tsx`
-- Server-side order charge: `src/lib/order-checkout.ts:168`
+- Server-side order charge: `src/lib/order-checkout.ts`
 - Auto-deploy: `scripts/auto-deploy.mjs`
+- Globals / fonts: `src/app/globals.css`
 - Deploy helper: `deploy.ps1`
