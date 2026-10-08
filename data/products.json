@@ -57,5 +57,23 @@
     "id": "prod_1791460812749_rext7jo",
     "createdAt": "2026-10-08T12:00:12.749Z",
     "updatedAt": "2026-10-08T12:00:12.749Z"
+  },
+  {
+    "slug": "product-1791461338340",
+    "name": "",
+    "category": "baby-clothing",
+    "price": null,
+    "ages": [],
+    "sizes": [],
+    "colors": [],
+    "images": [
+      "/products/upload_1791461336448_zfy1g9.jpeg"
+    ],
+    "description": "",
+    "featured": false,
+    "stock": 50,
+    "id": "prod_1791461338341_sjevrsc",
+    "createdAt": "2026-10-08T12:08:58.341Z",
+    "updatedAt": "2026-10-08T12:08:58.341Z"
   }
 ]
