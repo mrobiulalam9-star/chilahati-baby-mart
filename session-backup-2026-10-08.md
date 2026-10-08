@@ -31,6 +31,21 @@ stay in sync with local `http://localhost:3003/`. All changes are live on both.
 9. **Bangla "ঢাকা" in charge rule** — `deliveryChargeFor` now matches both
    `dhaka` and `ঢাকা`, so a Bangla-written Dhaka address gets the 80 taka rate
    (`src/lib/order-constants.ts`).
+10. **Admin "Upload Product" fix** — the button appeared dead because the server
+    required Name + Category + Price; missing Price (or Name) returned a 400 the
+    user never saw. Price is now optional (`price: null` = "Price on request",
+    already supported by the storefront) in `src/app/api/admin/products/route.ts`;
+    error toasts no longer auto-dismiss after 3s, and a missing name shows a
+    clear message (`src/app/admin/dashboard/page.tsx`).
+    Root cause was confirmed in the dev-server log: repeated `POST /api/admin/products 400`.
+11. **New Arrival duplicate image** — homepage New Arrival strip is a scroll
+    marquee that rendered each product TWICE (copy-a/copy-b) for the loop, so a
+    newly uploaded product image showed duplicated. Now each item renders once in
+    a scrollable row (`src/components/NewArrivals.tsx`). Verified: uploaded image
+    URL count on the homepage dropped 6 -> 4 (one card in strip + one in grid,
+    each with the hover-image fallback).
+12. **Zip backup** — `chilahati-baby-mart-backup-2026-10-08_1732.zip` (14.1 MB,
+    app source only, excludes .next/node_modules/.git).
 
 Verified live: the deployed client bundle contains "Your Address" and
 `deliveryChargeFor`; `House / road` is gone from production.
