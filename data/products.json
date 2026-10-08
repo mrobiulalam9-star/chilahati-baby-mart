@@ -75,5 +75,21 @@
     "id": "prod_1791461338341_sjevrsc",
     "createdAt": "2026-10-08T12:08:58.341Z",
     "updatedAt": "2026-10-08T12:08:58.341Z"
+  },
+  {
+    "slug": "product-1791461693320",
+    "name": "",
+    "category": "clothing",
+    "price": 99,
+    "ages": [],
+    "sizes": [],
+    "colors": [],
+    "images": [],
+    "description": "",
+    "featured": false,
+    "stock": 0,
+    "id": "prod_1791461693321_zwrleww",
+    "createdAt": "2026-10-08T12:14:53.321Z",
+    "updatedAt": "2026-10-08T12:14:53.321Z"
   }
 ]
