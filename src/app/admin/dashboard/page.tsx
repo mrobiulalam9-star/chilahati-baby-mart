@@ -204,12 +204,6 @@ export default function AdminDashboardPage() {
     setSubmitting(true);
 
     try {
-      if (!form.name.trim()) {
-        showMessage("Please enter a product name.", "error");
-        setSubmitting(false);
-        return;
-      }
-
       const editingSlug = editingId ? products.find((p) => p.id === editingId)?.slug : undefined;
       const wasNewArrival = editingSlug ? newArrivals.includes(editingSlug) : false;
 

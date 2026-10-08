@@ -105,14 +105,15 @@ export async function POST(req: NextRequest) {
       stock,
     } = body;
 
-    if (!name || !category) {
+    if (!category) {
       return NextResponse.json(
-        { error: "Name and category are required" },
+        { error: "Category is required" },
         { status: 400 }
       );
     }
 
-    const slug = slugify(name);
+    const baseName = typeof name === "string" ? name : "";
+    const slug = slugify(baseName) || `product-${Date.now()}`;
     const product = createAdminProduct({
       slug,
       name,
