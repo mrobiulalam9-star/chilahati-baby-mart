@@ -21,6 +21,12 @@ body {
   font-family: var(--font-sans);
 }
 
+input,
+textarea,
+select {
+  font-family: var(--font-sans);
+}
+
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
