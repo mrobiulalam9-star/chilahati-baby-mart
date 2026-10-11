@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { categories } from "@/lib/products";
 import { formatPrice, hasPrice } from "@/lib/site";
+import { ORDER_STATUS_LABELS, type OrderStatus } from "@/lib/order-constants";
+import type { Order } from "@/lib/order-store";
 
 type AdminProduct = {
   id: string;
@@ -61,6 +63,19 @@ const emptyForm: FormData = {
   stock: "50",
 };
 
+const ORDER_STATUS_STYLES: Record<OrderStatus, string> = {
+  pending: "bg-amber-50 text-amber-700 border-amber-200",
+  confirmed: "bg-sky-50 text-sky-700 border-sky-200",
+  delivered: "bg-green-50 text-green-700 border-green-200",
+  cancelled: "bg-red-50 text-red-700 border-red-200",
+};
+
+function orderDateLabel(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
+
 export default function AdminDashboardPage() {
   const router = useRouter();
   const [products, setProducts] = useState<AdminProduct[]>([]);
@@ -76,6 +91,7 @@ export default function AdminDashboardPage() {
   const [filterCategory, setFilterCategory] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [newArrivals, setNewArrivals] = useState<string[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [orderCount, setOrderCount] = useState<number | null>(null);
   const [countingOrders, setCountingOrders] = useState(false);
 
@@ -88,7 +104,9 @@ export default function AdminDashboardPage() {
         return;
       }
       const data = await res.json();
-      setOrderCount((data.orders || []).length);
+      const list: Order[] = data.orders || [];
+      setOrders(list);
+      setOrderCount(list.length);
     } catch {
       showMessage("Failed to load orders", "error");
     } finally {
@@ -153,8 +171,23 @@ export default function AdminDashboardPage() {
         /* non-critical */
       }
     };
+    const loadOrders = async () => {
+      try {
+        const res = await fetch("/api/orders");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) {
+          const list: Order[] = data.orders || [];
+          setOrders(list);
+          setOrderCount(list.length);
+        }
+      } catch {
+        /* non-critical */
+      }
+    };
     load();
     loadNewArrivals();
+    loadOrders();
     return () => { cancelled = true; };
   }, [router]);
 
@@ -455,6 +488,57 @@ export default function AdminDashboardPage() {
             {message.text}
           </div>
         )}
+
+        {/* Orders preview */}
+        <div className="mb-8 bg-white rounded-3xl border border-line overflow-hidden">
+          <div className="p-6 border-b border-line flex items-center justify-between gap-3">
+            <div>
+              <h2 className="font-display font-bold text-xl">All Orders</h2>
+              <p className="text-sm text-muted mt-1">
+                {orders.length} order{orders.length === 1 ? "" : "s"} total
+              </p>
+            </div>
+            <a
+              href="/admin/orders"
+              className="shrink-0 text-sm font-semibold text-blush hover:text-blush-deep transition-colors"
+            >
+              Manage →
+            </a>
+          </div>
+          {orders.length === 0 ? (
+            <div className="py-12 text-center">
+              <p className="font-display font-semibold">No orders yet</p>
+              <p className="mt-1 text-sm text-muted">Orders placed from the storefront appear here.</p>
+            </div>
+          ) : (
+            <ul className="divide-y divide-line">
+              {orders.map((order) => (
+                <li key={order.id} className="px-6 py-4">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="font-display font-bold">{order.orderNo}</span>
+                      <span
+                        className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold ${ORDER_STATUS_STYLES[order.status]}`}
+                      >
+                        {ORDER_STATUS_LABELS[order.status]}
+                      </span>
+                      <span className="text-sm text-muted">{order.customer.name}</span>
+                    </div>
+                    <div className="flex items-center gap-4 text-sm">
+                      <span className="text-muted">{orderDateLabel(order.createdAt)}</span>
+                      <span className="font-semibold tabular-nums">{formatPrice(order.total)}</span>
+                    </div>
+                  </div>
+                  {order.items.length > 0 && (
+                    <p className="mt-1 truncate text-sm text-muted">
+                      {order.items.map((item) => `${item.quantity}× ${item.name}`).join(", ")}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
