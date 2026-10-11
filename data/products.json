@@ -91,5 +91,23 @@
     "id": "prod_1791462502674_25y4cvc",
     "createdAt": "2026-10-08T12:28:22.674Z",
     "updatedAt": "2026-10-08T12:28:22.674Z"
+  },
+  {
+    "slug": "product-1791718686276",
+    "name": "",
+    "category": "baby-clothing",
+    "price": null,
+    "ages": [],
+    "sizes": [],
+    "colors": [],
+    "images": [
+      "/products/upload_1791718682160_3nq9nh.jpeg"
+    ],
+    "description": "",
+    "featured": false,
+    "stock": 50,
+    "id": "prod_1791718686277_s9lfn33",
+    "createdAt": "2026-10-11T11:38:06.277Z",
+    "updatedAt": "2026-10-11T11:38:06.277Z"
   }
 ]
