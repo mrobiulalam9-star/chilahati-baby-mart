@@ -10,19 +10,20 @@ type Props = {
 
 export default function ProductGallery({ images, name }: Props) {
   const [active, setActive] = useState(0);
+  const uniqueImages = Array.from(new Set(images));
   return (
     <div>
       <div className="relative aspect-[3/4] overflow-hidden border border-line rounded-3xl bg-white">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={images[active]}
+          src={uniqueImages[active]}
           alt={name}
           onError={handleImageError}
           className="absolute inset-0 h-full w-full object-cover"
         />
       </div>
       <div className="mt-4 flex gap-3">
-        {images.map((img, i) => (
+        {uniqueImages.map((img, i) => (
           <button
             key={img}
             type="button"
