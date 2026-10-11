@@ -1,20 +1,4 @@
 {
-  "cloud-cotton-romper": {
-    "slug": "cloud-cotton-romper",
-    "updatedAt": "2026-09-30T14:32:08.897Z",
-    "name": "",
-    "price": 450,
-    "images": [
-      "/products/cloud-cotton-romper-a.jpg",
-      "/products/cloud-cotton-romper-b.jpg"
-    ],
-    "oldPrice": 550,
-    "ages": [],
-    "sizes": [],
-    "colors": [],
-    "description": "Buttery-soft 100% cotton romper with snap closures for quick changes. Gentle on newborn skin and easy to wash.",
-    "featured": true
-  },
   "blossom-party-frock": {
     "slug": "blossom-party-frock",
     "updatedAt": "2026-09-20T09:29:15.603Z",
