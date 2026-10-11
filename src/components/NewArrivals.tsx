@@ -111,7 +111,6 @@ export default function NewArrivals({ items }: { items: Product[] }) {
             <h2 id="new-arrival-heading" className="font-display mt-1.5 text-3xl font-bold sm:text-4xl">
               New Arrival
             </h2>
-            <p className="mt-1 text-sm text-muted">Freshly added picks from the shop</p>
           </div>
           <Link
             href="/shop"
