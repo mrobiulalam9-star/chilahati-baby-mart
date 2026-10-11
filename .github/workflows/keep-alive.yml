@@ -1,0 +1,46 @@
+name: Keep Render site awake
+
+# Render's free tier spins the web service down after ~15 minutes of no traffic,
+# which makes the next real visitor wait through the "Application loading"
+# screen. A scheduled ping keeps an instance warm so customers never see it.
+#
+# Notes:
+# - GitHub cron is best-effort (may be delayed a few minutes under load), so we
+#   ping every 5 minutes: well inside the 15-minute idle window.
+# - GitHub disables scheduled workflows after 60 days of repository inactivity.
+#   The auto-deploy watcher keeps pushing, so that should not trigger here.
+# - Run it manually any time from the Actions tab (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: keep-alive
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping production site
+        env:
+          SITE: https://chilahati-baby-mart.onrender.com
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            code=$(curl -sS -o /dev/null -w "%{http_code}" --max-time 60 "$SITE/" || echo "000")
+            echo "attempt $attempt -> HTTP $code"
+            if [ "$code" = "200" ]; then
+              echo "Site is awake."
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "Site did not return 200 after 3 attempts." >&2
+          exit 1
