@@ -76,6 +76,25 @@ export default function AdminDashboardPage() {
   const [filterCategory, setFilterCategory] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [newArrivals, setNewArrivals] = useState<string[]>([]);
+  const [orderCount, setOrderCount] = useState<number | null>(null);
+  const [countingOrders, setCountingOrders] = useState(false);
+
+  const countOrders = async () => {
+    setCountingOrders(true);
+    try {
+      const res = await fetch("/api/orders");
+      if (res.status === 401) {
+        router.push("/admin");
+        return;
+      }
+      const data = await res.json();
+      setOrderCount((data.orders || []).length);
+    } catch {
+      showMessage("Failed to load orders", "error");
+    } finally {
+      setCountingOrders(false);
+    }
+  };
 
   const showMessage = (text: string, type: "success" | "error") => {
     setMessage({ text, type });
@@ -383,6 +402,16 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={countOrders}
+              disabled={countingOrders}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border border-line rounded-xl hover:border-blush transition-colors disabled:opacity-60"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 11H3v10h6V11zM15 7H9v14h6V7zM21 3h-6v18h6V3z" />
+              </svg>
+              {orderCount === null ? (countingOrders ? "Counting…" : "Order Count") : `Order Count: ${orderCount}`}
+            </button>
             <a
               href="/admin/orders"
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border border-line rounded-xl hover:border-blush transition-colors"
