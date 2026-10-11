@@ -46,17 +46,15 @@ export default function NewArrivals({ items }: { items: Product[] }) {
     }
   };
 
-  const renderCard = (p: Product, suffix: string, duplicate = false) => {
+  const renderCard = (p: Product) => {
     const main = p.images[0];
     const alt = p.images[1] ?? main;
     const label = categories.find((c) => c.slug === p.category)?.name ?? "";
     return (
       <Link
-        key={`${p.slug}-${suffix}`}
+        key={p.slug}
         href={`/product/${p.slug}`}
         className="group block w-[240px] shrink-0 sm:w-[320px]"
-        tabIndex={duplicate ? -1 : undefined}
-        aria-hidden={duplicate ? "true" : undefined}
       >
         <div className="relative aspect-[3/4] overflow-hidden rounded-3xl border border-line bg-white shadow-sm">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -140,8 +138,7 @@ export default function NewArrivals({ items }: { items: Product[] }) {
             onMouseLeave={() => (pausedRef.current = false)}
             className="no-scrollbar -mx-4 flex gap-5 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6"
           >
-            {items.map((p) => renderCard(p, "single"))}
-            {items.length > 1 && renderCard(items[0], "clone", true)}
+            {items.map((p) => renderCard(p))}
           </div>
           <button
             type="button"
