@@ -310,7 +310,7 @@ function metricInput(id, isPct, label, readonly) {
       if (mn == null || !isFinite(mn)) return;
       set(META.dse.turn, mn / 10); // 1 crore = 10 million
       recomputeAll();
-    } catch (err) { /* keep current value */ }
+    } catch { /* keep current value */ }
   }
 
   // CSCX Index + Total CSE Turnover (in Tk crore) from cse.com.bd live.
@@ -326,7 +326,7 @@ function metricInput(id, isPct, label, readonly) {
       }
       if (results[1] && results[1].crore != null) set(META.cse.turn, results[1].crore);
       recomputeAll();
-    } catch (err) { /* keep current value */ }
+    } catch { /* keep current value */ }
   }
 
   function bind() {
@@ -376,7 +376,7 @@ function metricInput(id, isPct, label, readonly) {
     });
     if (!res.ok) {
       var msg = "Failed (" + res.status + ")";
-      try { var bad = await res.json(); if (bad && bad.message) msg = bad.message; } catch (e) { /* keep */ }
+      try { var bad = await res.json(); if (bad && bad.message) msg = bad.message; } catch { /* keep */ }
       var err = new Error(msg);
       err.http = true;
       throw err;
@@ -445,7 +445,7 @@ function metricInput(id, isPct, label, readonly) {
       });
       if (!res.ok) {
         var msg = "Failed (" + res.status + ")";
-        try { var bad = await res.json(); if (bad && bad.message) msg = bad.message; } catch (e) { /* keep */ }
+        try { var bad = await res.json(); if (bad && bad.message) msg = bad.message; } catch { /* keep */ }
         status.textContent = msg;
         status.className = "report-status report-error";
         return;
@@ -455,7 +455,7 @@ function metricInput(id, isPct, label, readonly) {
       fillFromData(data);
       status.textContent = "Filled from " + file.name + " (amounts in Tk crore).";
       status.className = "report-status report-ok";
-    } catch (err) {
+    } catch {
       status.textContent = "Network error - please try again.";
       status.className = "report-status report-error";
     } finally {

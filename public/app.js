@@ -115,7 +115,7 @@ async function loadDseGraph() {
       colors: ['#2865a0'],
       series: { 'DSEX Index': { fillGraph: true, strokeWidth: 1, highlightCircleSize: 3 } }
     });
-  } catch (err) {
+  } catch {
     box.textContent = 'Graph unavailable';
   }
 }

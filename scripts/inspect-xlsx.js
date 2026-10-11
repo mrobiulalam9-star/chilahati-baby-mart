@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const XLSX = require('xlsx');
 const wb = XLSX.readFile('C:\\Users\\MDX\\Desktop\\08-09-26.xlsx');
 const ws = wb.Sheets[wb.SheetNames[0]];

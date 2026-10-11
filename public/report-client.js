@@ -23,7 +23,7 @@
         try {
           var data = await res.json();
           if (data && data.message) msg = data.message;
-        } catch (e) { /* not JSON */ }
+        } catch { /* not JSON */ }
         status.textContent = msg;
         status.className = "report-status report-error";
         return;
@@ -42,7 +42,7 @@
 
       status.textContent = "PDF downloaded.";
       status.className = "report-status report-ok";
-    } catch (err) {
+    } catch {
       status.textContent = "Network error - please try again.";
       status.className = "report-status report-error";
     } finally {

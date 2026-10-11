@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const XLSX = require('xlsx');
 const file = process.argv[2];
 const wb = XLSX.readFile(file);

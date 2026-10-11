@@ -232,7 +232,7 @@
         try {
           var data = await res.json();
           if (data && data.message) msg = data.message;
-        } catch (e) { /* not JSON */ }
+        } catch { /* not JSON */ }
         status.textContent = msg;
         status.className = "report-status report-error";
         return;
@@ -245,7 +245,7 @@
       wrap.hidden = false;
       status.textContent = "Loaded " + (data.sections || []).length + " sections.";
       status.className = "report-status report-ok";
-    } catch (err) {
+    } catch {
       status.textContent = "Network error - please try again.";
       status.className = "report-status report-error";
     } finally {
