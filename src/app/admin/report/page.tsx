@@ -74,6 +74,7 @@ export default function ReportPage() {
       <header className="bg-white border-b border-line sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.jpg" alt="Logo" className="w-9 h-9 rounded-full object-cover" />
             <div>
               <h1 className="font-display font-bold text-lg leading-none">Report Studio</h1>

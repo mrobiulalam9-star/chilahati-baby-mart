@@ -124,7 +124,7 @@ function titleBlock(title: string, metaLines: string[]) {
   ];
 }
 
-function excelContent(buffer: Buffer, filename: string) {
+function excelContent(buffer: Buffer) {
   const workbook = XLSX.read(buffer, { type: "buffer" });
   const sheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[sheetName];
@@ -209,7 +209,7 @@ function excelContent(buffer: Buffer, filename: string) {
   };
 }
 
-async function pdfContent(buffer: Buffer, filename: string) {
+async function pdfContent(buffer: Buffer) {
   const parser = new PDFParse({ data: buffer });
   let pageTexts: string[] = [];
   try {
@@ -288,7 +288,7 @@ export async function generateReport(
 
   if (extension === "pdf") {
     source = "pdf";
-    const extracted = await pdfContent(fileBuffer, originalName);
+    const extracted = await pdfContent(fileBuffer);
     content = [
       ...titleBlock(
         baseName || "PDF Document",
@@ -301,7 +301,7 @@ export async function generateReport(
     pages = extracted.pages;
   } else {
     source = "excel";
-    const table = excelContent(fileBuffer, originalName);
+    const table = excelContent(fileBuffer);
     rows = table.rows;
     columns = table.columns;
     const metaLines = [

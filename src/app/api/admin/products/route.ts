@@ -7,7 +7,7 @@ import {
   type AdminProduct,
 } from "@/lib/admin-products";
 import { products as staticProducts } from "@/lib/products";
-import { getHiddenSlugs, hideProduct, unhideProduct } from "@/lib/admin-hidden";
+import { getHiddenSlugs } from "@/lib/admin-hidden";
 import { getOverrides } from "@/lib/admin-overrides";
 import { mergeStaticOverride } from "@/lib/all-products";
 import { getNewArrivalSlugs } from "@/lib/admin-new-arrivals";

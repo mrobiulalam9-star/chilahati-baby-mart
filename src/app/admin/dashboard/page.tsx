@@ -375,6 +375,7 @@ export default function AdminDashboardPage() {
       <header className="bg-white border-b border-line sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.jpg" alt="Logo" className="w-9 h-9 rounded-full object-cover" />
             <div>
               <h1 className="font-display font-bold text-lg leading-none">Admin Dashboard</h1>
@@ -675,6 +676,7 @@ export default function AdminDashboardPage() {
                   <div className="flex flex-wrap gap-3 mt-4">
                     {uploadedImages.map((img, i) => (
                       <div key={i} className="relative group">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={img}
                           alt={`Upload ${i + 1}`}
@@ -783,6 +785,7 @@ export default function AdminDashboardPage() {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           {product.images[0] && (
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={product.images[0]}
                               alt={product.name}

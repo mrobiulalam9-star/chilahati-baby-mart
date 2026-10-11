@@ -44,6 +44,7 @@ export default function Header() {
                 </svg>
               </button>
               <Link href="/" className="flex items-center gap-2 group">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/logo.jpg"
                   alt="Chilahati Ladies & Baby Mart logo"

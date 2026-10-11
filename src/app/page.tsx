@@ -15,27 +15,6 @@ import { getAllProducts, getNewArrivals } from "@/lib/all-products";
  */
 export const dynamic = "force-dynamic";
 
-const TESTIMONIALS = [
-  {
-    quote:
-      "I bought my daughter's Eid frock from here. Really impressed with the fabric quality!",
-    name: "Rumana Akter",
-    place: "Chilahati",
-  },
-  {
-    quote:
-      "Best baby clothing collection in Dimla. The owner helped me pick the perfect gift set for my nephew.",
-    name: "Mahfuz Rahman",
-    place: "Dimla Sadar",
-  },
-  {
-    quote:
-      "I ordered over the phone and got delivery the very same day. The price is also very reasonable.",
-    name: "Shahida Parvin",
-    place: "Khalisha Chapani",
-  },
-];
-
 export default function HomePage() {
   const allProducts = getAllProducts();
   const featured = allProducts.filter((p) => p.featured).slice(0, 8);
